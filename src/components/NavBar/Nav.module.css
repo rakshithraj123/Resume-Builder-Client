@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+  display: flex;
+  position: sticky;
+  align-items: center;
+  justify-content: space-between;
+  top: 0px;
+  background: rgba(0, 0, 0, 0.6) url(
+'https://media.geeksforgeeks.org/wp-content/uploads/20201215124609/Capture-300x14.PNG');
+  background-blend-mode: darken;
+  background-size: cover;
+  color: white;
+  padding: 10px 20px;
+  margin-bottom: 100px;
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+}
+
+.navList li {
+  margin-right: 20px;
+}
+
+.navList li:last-child {
+  margin-right: 0;
+}
+
+.navList li a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  transition: color 0.3s ease-in-out;
+}
+
+.navList li a:hover {
+  color: #ffd700;
+  /* Change the color on hover */
+}
+.navbar_link_active {
+  border-bottom: 3px solid #29b6f6;
+  transition: border-bottom .5s ease-in-out;
+}
+

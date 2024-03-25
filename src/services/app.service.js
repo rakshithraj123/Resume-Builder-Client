@@ -61,7 +61,7 @@ export const AppService = {
 export const HTTPHeaders = () => {
   return {
     headers: {
-      'Content-type': 'application/json',
+      'Content-type': 'application/json;charset=utf-8',
     }
   }
 }

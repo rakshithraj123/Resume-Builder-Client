@@ -23,7 +23,7 @@ const NavBar = ({ user, handleLogout }) => {
   return (
     <nav className={styles.navbar}>
       {user ?
-        <ul class={styles.navList}>
+        <ul className={styles.navList}>
           <li>Welcome, {user.name}</li>
           <li><NavLink to="" onClick={handleLogout}>LOG OUT</NavLink></li>
         </ul>

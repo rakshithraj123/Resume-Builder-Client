@@ -23,9 +23,9 @@ export const userService = {
       body: requestData,
     })
 
-    let token = response.toString()
-    if (response.token) 
-       tokenService.setSessionToken(response.token)
+    let jsonResponse = response
+    if (jsonResponse.token) 
+       tokenService.setSessionToken(jsonResponse.token)
     console.log(tokenService.getSessionToken())
 
     // let response = {"token":"dfzkljkvcvk"}
@@ -33,7 +33,7 @@ export const userService = {
     //   tokenService.setSessionToken(response.token)
 
     //   console.log(tokenService.getSessionToken())
-    return response
+    return jsonResponse
   },
   getUser:  () => {
     return tokenService.getUserFromToken()

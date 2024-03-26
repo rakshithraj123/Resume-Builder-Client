@@ -3,16 +3,19 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { userService } from '../../services'
 import {
-  NETWORK_ERROR,
+  NETWORK_ERROR, LOGGING_IN,
+  HOME_MENU
 } from '../../constants'
+import LoadingSpinner from '../../components/LoadingSpinner'
 
 // css
 import styles from './Login.module.css'
 
-const LoginPage = ({ handleAuthEvt }) => {
+const LoginPage = ({ handleAuthEvt,handleNavigation }) => {
   const navigate = useNavigate()
 
   const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -30,20 +33,21 @@ const LoginPage = ({ handleAuthEvt }) => {
     //   throw new Error('No VITE_BACK_END_SERVER_URL in front-end .env')
     // }
     // await authService.login(formData)
-
+    setLoading(true)
     userService
       .login(formData)
       .then(response => {
         setMessage(JSON.stringify(response))
-
+        setLoading(false)
         handleAuthEvt()
-        navigate('/')
+        handleNavigation(HOME_MENU)
       })
       .catch((err) => {
         console.log(err)
         setMessage(NETWORK_ERROR)
+        setLoading(false)
       })
-    
+
   }
 
   const { email, password } = formData
@@ -52,9 +56,19 @@ const LoginPage = ({ handleAuthEvt }) => {
     return !(email && password)
   }
 
+  if (loading)
+    return (
+      <main className={styles.container}>
+        <LoadingSpinner text={LOGGING_IN} />
+      </main>
+    )
+
+
+
   return (
     <main className={styles.container}>
       <h1>Log In</h1>
+      <br/><br/>
       <form autoComplete="off" onSubmit={handleSubmit} className={styles.form}>
         <label className={styles.label}>
           Email

@@ -1,22 +1,31 @@
 // npm modules
 import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
-
-
+import { userService } from '../../services'
+import {
+  NETWORK_ERROR,REGISTRING,
+} from '../../constants'
+import { toast } from "react-toastify";
+import LoadingSpinner from '../../components/LoadingSpinner'
+import {
+  LOG_IN_MENU 
+} from '../../constants'
 // css
 import styles from './Signup.module.css'
 
-const Signup = ({ handleAuthEvt }) => {
+
+const Signup = ({ handleAuthEvt,handleNavigation }) => {
   const navigate = useNavigate()
   const imgInputRef = useRef(null)
 
   const [message, setMessage] = useState('')
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     passwordConf: '',
+    phoneNumber :'',
   })
   const [photoData, setPhotoData] = useState({ photo: null })
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -55,35 +64,78 @@ const Signup = ({ handleAuthEvt }) => {
 
   const handleSubmit = async evt => {
     evt.preventDefault()
-    try {
-      // if (!import.meta.env.VITE_BACK_END_SERVER_URL) {
-      //   throw new Error('No VITE_BACK_END_SERVER_URL in front-end .env')
-      // }
-      setIsSubmitted(true)
-      // await authService.signup(formData, photoData.photo)
-      handleAuthEvt()
-      navigate('/')
-    } catch (err) {
-      console.log(err)
-      setMessage(err.message)
+   
+    // setIsSubmitted(true)
+    //  setTimeout(() =>{
+    //   toast("Hello Geeks 5");
+    //    setIsSubmitted("false")
+     
+    //    handleAuthEvt()
+    //    handleNavigation(LOG_IN_MENU)
+    //  },2000)
+
+    setIsSubmitted(true)
+    userService
+    .register(formData)
+    .then(response => {
+      setMessage(JSON.stringify(response))
       setIsSubmitted(false)
-    }
+      toast("Registration success");
+      handleAuthEvt()
+      handleNavigation(LOG_IN_MENU)
+    })
+    .catch((err) => {
+      console.log(err)
+      setMessage(err.error)
+      setIsSubmitted(false)
+    })
+
+
+
+
+    // try {
+    //   // if (!import.meta.env.VITE_BACK_END_SERVER_URL) {
+    //   //   throw new Error('No VITE_BACK_END_SERVER_URL in front-end .env')
+    //   // }
+    //   setIsSubmitted(true)
+    //   await authService.signup(formData, photoData.photo)
+    //   handleAuthEvt()
+    //   navigate('/')
+    // } catch (err) {
+    //   console.log(err)
+    //   setMessage(err.message)
+    //   setIsSubmitted(false)
+    // }
   }
 
-  const { name, email, password, passwordConf } = formData
+ 
+
+  const { firstName,lastName, email, password, passwordConf,phoneNumber } = formData
 
   const isFormInvalid = () => {
-    return !(name && email && password && password === passwordConf)
+    return !(firstName && lastName && email && password && password === passwordConf && phoneNumber)
   }
+
+  if (isSubmitted)
+  return (
+    <main className={styles.container}>
+      <LoadingSpinner text={REGISTRING} />
+    </main>
+  )
+
 
   return (
     <main className={styles.container}>
       <h1>Sign Up</h1>
-      <p className={styles.message}>{message}</p>
+      <br/>
       <form autoComplete="off" onSubmit={handleSubmit} className={styles.form}>
         <label className={styles.label}>
-          Name
-          <input type="text" value={name} name="name" onChange={handleChange} />
+          First Name
+          <input type="text" value={firstName} name="firstName" onChange={handleChange} />
+        </label>
+        <label className={styles.label}>
+          Last Name
+          <input type="text" value={lastName} name="lastName" onChange={handleChange} />
         </label>
         <label className={styles.label}>
           Email
@@ -112,6 +164,15 @@ const Signup = ({ handleAuthEvt }) => {
             onChange={handleChange}
           />
         </label>
+        <label className={styles.label}>
+          Phone Number
+          <input
+            type="phone"
+            value={phoneNumber}
+            name="phoneNumber"
+            onChange={handleChange}
+          />
+        </label>
         {/* <label className={styles.label}>
           Upload Photo
           <input 
@@ -131,6 +192,8 @@ const Signup = ({ handleAuthEvt }) => {
           </button>
         </div>
       </form>
+      <p className={styles.message}>{message}</p>
+    
     </main>
   )
 }

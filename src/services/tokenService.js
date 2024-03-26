@@ -21,7 +21,7 @@ function getSessionToken() {
 
 function getUserFromToken() {
   const token = getToken()
-  //return token ? jwtDecode(token).user : null
+  //let user =  token ? jwtDecode(token).user : null
   return token ? {"name":"rakshith raj"} : null
 }
 

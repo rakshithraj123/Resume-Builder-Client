@@ -5,6 +5,7 @@ import * as tokenService from './tokenService'
 import {
   BASE_API_URL,
   LOGIN,
+  REGISTER
 } from '../constants'
 
 const options = AppService.options()
@@ -24,23 +25,39 @@ export const userService = {
     })
 
     let jsonResponse = response
-    if (jsonResponse.token) 
-       tokenService.setSessionToken(jsonResponse.token)
+    if (jsonResponse.token)
+      tokenService.setSessionToken(jsonResponse.token)
     console.log(tokenService.getSessionToken())
-
-    // let response = {"token":"dfzkljkvcvk"}
-    // if (response.token) 
-    //   tokenService.setSessionToken(response.token)
-
-    //   console.log(tokenService.getSessionToken())
     return jsonResponse
   },
-  getUser:  () => {
+  getUser: () => {
     return tokenService.getUserFromToken()
   },
-  logout :  () => {
+  logout: () => {
     return tokenService.removeSessionToken()
-  }
+  },
+  register: async (data) => {
+    console.log(JSON.stringify(data))
+    var requestData = JSON.stringify(
+      {"firstName":data.firstName,
+      "lastName":data.lastName,
+      "email":data.email,
+      "password":data.password,
+      "phone":data.phoneNumber,
+      "roleid":"1"
+    })
+    console.log(requestData)
+    let response = null
+    response = await AppService.makeRequest(BASE_API_URL + REGISTER, {
+      ...options,
+      ...HTTPHeaders(),
+      body: requestData,
+    })
+
+    
+    console.log(console.log(JSON.stringify(response)))
+    return response
+  },
 }
 
 

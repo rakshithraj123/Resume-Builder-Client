@@ -3,3 +3,4 @@ export const BASE_API_URL = 'https://resume-builder-sushith.onrender.com/'
 
 
 export const LOGIN = 'api/Users/Login'
+export const REGISTER = 'api/Users/register'

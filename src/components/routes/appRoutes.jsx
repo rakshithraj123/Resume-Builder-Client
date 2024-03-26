@@ -8,24 +8,60 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import ProtectedRoute from '../routes/ProtectedRoute'
 import PublicRoute from '../routes/PublicRoute'
 import { userService } from '../../services'
+import { useLocation } from 'react-router-dom'
+import {
+  LOG_IN_MENU, SIGN_UP_MENU,HOME_MENU,
+  LOG_IN_PATH, SIGN_UP_PATH,HOME_PATH
+} from '../../constants'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AppRoutes() {
   const [user, setUser] = useState(userService.getUser())
   const navigate = useNavigate()
 
+
   const handleLogout = () => {
     userService.logout()
     setUser(null)
-    navigate('/')
+    handleNavigation(LOG_IN_MENU)
+  }
+
+  const handleNavigation = (menu) => {
+    setActiveMenu(menu)
+    switch(menu){
+      case LOG_IN_MENU : return  navigate("/auth/login")
+      case SIGN_UP_MENU : return  navigate("/auth/signup")           
+      case HOME_MENU : return  navigate("/")
+      default: return  navigate("/")
+    }
+  }
+
+  const handleMenuChange = (menu) => {
+    setActiveMenu(menu)
   }
 
   const handleAuthEvt = () => {
     setUser(userService.getUser())
   }
+ 
+
+  const getIntialMenu = () => {
+    const location = useLocation();
+    switch(location.pathname){
+      case LOG_IN_PATH :  return LOG_IN_MENU
+      case SIGN_UP_PATH:  return SIGN_UP_MENU       
+      case HOME_PATH:  return user? HOME_MENU : LOG_IN_MENU
+      default : return HOME_MENU
+    }
+  }
+  const [activeMenu, setActiveMenu] = useState(getIntialMenu())
+  
   return (
     <>
-      <NavBar user={user} handleLogout={handleLogout} />
-        <div>
+      <ToastContainer />
+      <NavBar user={user} handleLogout={handleLogout}  activeMenu={activeMenu}  handleMenuChange={handleMenuChange}/>
+        <div > 
           <Routes>
             <Route
               path="/"
@@ -40,7 +76,7 @@ function AppRoutes() {
               path="/auth/login"
               element={
                 <PublicRoute user={user}>
-                  <Login handleAuthEvt={handleAuthEvt} />
+                  <Login handleAuthEvt={handleAuthEvt}  handleNavigation={handleNavigation}/>
                 </PublicRoute>
               }
             />
@@ -49,7 +85,7 @@ function AppRoutes() {
               path="/auth/signup"
               element={
                 <PublicRoute user={user}>
-                  <Signup handleAuthEvt={handleAuthEvt} />
+                  <Signup handleAuthEvt={handleAuthEvt} handleNavigation={handleNavigation}/>
                 </PublicRoute>
               }
             />

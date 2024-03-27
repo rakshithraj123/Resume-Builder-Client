@@ -27,6 +27,7 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js', '.jsx'],
+        fallback: { crypto: false },
     },
     module: {
         rules: [

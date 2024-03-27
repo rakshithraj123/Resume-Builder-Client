@@ -2,5 +2,30 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: blue;
+  background-color: rgb(210, 210, 225);
 }
+
+/* .step1::after {
+  content: "-------";
+  color: green;
+  position: absolute;
+}
+
+.step2::after {
+  content: "-------";
+  color: green;
+  position: absolute;
+} */
+
+/* .step2 
+{  
+   display: inline;  
+}  
+.steps3 
+{  
+    float:right;  
+}  
+.step1  
+{  
+float:left;  
+}   */

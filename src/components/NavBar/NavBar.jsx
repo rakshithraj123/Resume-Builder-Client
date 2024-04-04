@@ -27,7 +27,7 @@ const NavBar = ({ user, handleLogout,activeMenu, handleMenuChange}) => {
     <nav className={styles.navbar}>
       {user ?
         <ul className={styles.navList}>
-          <li>Welcome, {user.name}</li>
+          <li>Welcome, {user.firstName+" "+user.lastName}</li>
           {protectedMenuItems.map((menuItem, index) =>
             <li key={index}><NavLink to={menuItem.path}
               className={activeMenu == menuItem.menuName ? styles.navbar_link_active : {}}

@@ -46,12 +46,16 @@ module.exports = {
                     },
                     {
                       // Interprets `@import` and `url()` like `import/require()` and will resolve them
-                      loader: 'css-loader'
+                      loader: 'css-loader',
+                      options: {
+                        sourceMap: true
+                      }
                     },
                     {
                       // Loader for webpack to process CSS with PostCSS
                       loader: 'postcss-loader',
                       options: {
+                        sourceMap: true,
                         postcssOptions: {
                           plugins: [
                             autoprefixer
@@ -59,10 +63,12 @@ module.exports = {
                         }
                       }
                     },
-                    {
-                      // Loads a SASS/SCSS file and compiles it to CSS
-                      loader: 'sass-loader'
-                    }
+                    // {
+                    //   // Loads a SASS/SCSS file and compiles it to CSS
+                    //   loader: 'sass-loader'
+                    // },
+                  
+                    
                   ],
             },
             {

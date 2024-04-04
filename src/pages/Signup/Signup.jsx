@@ -86,7 +86,7 @@ const Signup = ({ handleAuthEvt,handleNavigation }) => {
     })
     .catch((err) => {
       console.log(err)
-      setMessage(err.error)
+      setMessage(err.message)
       setIsSubmitted(false)
     })
 

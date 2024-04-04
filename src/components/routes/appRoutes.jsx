@@ -3,6 +3,7 @@ import NavBar from '../NavBar/NavBar'
 import Login from '../../pages/Login/Login'
 import Signup from '../../pages/Signup/Signup'
 import Landing from '../../pages/Landing/Landing'
+import CreateResume  from '../../pages/CreateResume/CreateResume'
 import { useState } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import ProtectedRoute from '../routes/ProtectedRoute'
@@ -10,8 +11,8 @@ import PublicRoute from '../routes/PublicRoute'
 import { userService } from '../../services'
 import { useLocation } from 'react-router-dom'
 import {
-  LOG_IN_MENU, SIGN_UP_MENU,HOME_MENU,
-  LOG_IN_PATH, SIGN_UP_PATH,HOME_PATH
+  LOG_IN_MENU, SIGN_UP_MENU,HOME_MENU,CREATE_RESUME_MENU,
+  LOG_IN_PATH, SIGN_UP_PATH,HOME_PATH,CREATE_RESUME_PATH
 } from '../../constants'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,6 +34,7 @@ function AppRoutes() {
       case LOG_IN_MENU : return  navigate("/auth/login")
       case SIGN_UP_MENU : return  navigate("/auth/signup")           
       case HOME_MENU : return  navigate("/")
+      case CREATE_RESUME_MENU : return  navigate("/createResume")
       default: return  navigate("/")
     }
   }
@@ -52,6 +54,7 @@ function AppRoutes() {
       case LOG_IN_PATH :  return LOG_IN_MENU
       case SIGN_UP_PATH:  return SIGN_UP_MENU       
       case HOME_PATH:  return user? HOME_MENU : LOG_IN_MENU
+      case CREATE_RESUME_PATH:  return user? CREATE_RESUME_MENU : LOG_IN_MENU
       default : return HOME_MENU
     }
   }
@@ -67,7 +70,16 @@ function AppRoutes() {
               path="/"
               element={
                 <ProtectedRoute user={user}>
-                  <Landing user={user} />
+                  <Landing user={user} handleNavigation={handleNavigation}/>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/createResume"
+              element={
+                <ProtectedRoute user={user}>
+                  <CreateResume />
                 </ProtectedRoute>
               }
             />

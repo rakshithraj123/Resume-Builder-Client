@@ -1,6 +1,7 @@
 
 import { AppService, HTTPHeaders } from '.'
 import * as tokenService from './tokenService'
+import bcrypt from 'bcryptjs';
 
 import {
   BASE_API_URL,
@@ -15,7 +16,7 @@ export const userService = {
 
     var requestData = JSON.stringify({
       "email": data.email,
-      "password": data.password
+      "password": hashString(data.password)
     });
     let response = null
     response = await AppService.makeRequest(BASE_API_URL + LOGIN, {
@@ -42,7 +43,7 @@ export const userService = {
       {"firstName":data.firstName,
       "lastName":data.lastName,
       "email":data.email,
-      "password":data.password,
+      "password": hashString(data.password),
       "phone":data.phoneNumber,
       "roleid":"1"
     })
@@ -60,4 +61,9 @@ export const userService = {
   },
 }
 
-
+const hashString = (textToHash) => {
+  const saltRounds = 10
+  const hash = bcrypt.hashSync(textToHash, saltRounds);
+  console.log(hash);
+  return hash;
+}

@@ -4,7 +4,7 @@ import { Container, Row, Col, ListGroup, Card } from 'react-bootstrap'
 import { useState } from 'react';
 import ResumeTemplate  from '../../components/ResumeTemplate';
 import {
-  CREATE_RESUME_MENU 
+  CREATE_RESUME_MENU ,PREVIEW_RESUME_MENU
 } from '../../constants'
 
 const Landing = ({ user,handleNavigation }) => {

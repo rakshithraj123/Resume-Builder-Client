@@ -48,7 +48,7 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
       })
       .catch((err) => {
         console.log(err);
-        setMessage(NETWORK_ERROR);
+        setMessage(err.error);
         setLoading(false);
       });
   };
@@ -88,6 +88,7 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
             value={email}
             name="email"
             onChange={handleChange}
+            style={{marginLeft:"10px"}}
           />
         </label>
         <label className={styles.label}>
@@ -97,6 +98,7 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
             value={password}
             name="password"
             onChange={handleChange}
+            style={{marginLeft:"10px"}}
           />
         </label>
         <div>

@@ -29,14 +29,14 @@ function AppRoutes() {
     handleNavigation(LOG_IN_MENU)
   }
 
-  const handleNavigation = (menu) => {
+  const handleNavigation = (menu,data={}) => {
     setActiveMenu(menu)
     switch(menu){
       case LOG_IN_MENU : return  navigate("/auth/login")
       case SIGN_UP_MENU : return  navigate("/auth/signup")           
       case HOME_MENU : return  navigate("/")
       case CREATE_RESUME_MENU : return  navigate("/createResume")
-      case PREVIEW_RESUME_MENU : return  navigate("/previewResume")
+      case PREVIEW_RESUME_MENU : return  navigate("/previewResume", { state: { data: data } })
       default: return  navigate("/")
     }
      }
@@ -82,7 +82,7 @@ function AppRoutes() {
               path="/createResume"
               element={
                 <ProtectedRoute user={user}>
-                  <CreateResume />
+                  <CreateResume handleNavigation={handleNavigation}/>
                 </ProtectedRoute>
               }
             />
@@ -91,7 +91,7 @@ function AppRoutes() {
               path="/previewResume"
               element={
                 <ProtectedRoute user={user}>
-                  <PreviewResume />
+                  <PreviewResume handleNavigation={handleNavigation}/>
                 </ProtectedRoute>
               }
             />

@@ -1,18 +1,23 @@
 import React from 'react';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import styles from "./PreviewResume.module.css";
+import { useLocation } from 'react-router-dom';
 
-const PreviewResume = () => {
+const PreviewResume = ({handleNavigation}) => {
+    const { state } = useLocation();
+    const data = state?.data;
+    //console.log(JSON.stringify(data))
 
-    let data = {
-        "name": "RAVIKUMAR HIREMATH",
-        "phoneNo": "+91 97432 17925",
+    let data_ = {
+        "firstName": 'RAVIKUMAR',
+        "lastName": 'HIREMATH',
+        "phoneNumber": "+91 97432 17925",
         "email": "ravikumar.h@glowtouch.com",
         "objective": "Experienced Service Delivery Professional with a strong background in Customer Support industry. Skilled in leading cross-functional teams, fostering client relationships, and implementing strategies to optimize service delivery and enhance customer satisfaction. Exceptional communicator with a focus on aligning business objectives with service delivery excellence.",
-        "Key Skills": ["Strong leadership and team management abilities",
+        "keySkills": ["Strong leadership and team management abilities",
             "Strategic thinker with a focus on continuous improvement",
             "Customer-centric approach to service delivery"],
-        "Professional Experience": [
+        "professionalExperience": [
             {
                 "company_name": "GlowTouch Technologies Pvt. Ltd (From Aug 2009 till date)",
                 "work": [{
@@ -38,10 +43,10 @@ const PreviewResume = () => {
                 }]
             }
         ],
-        "Education": [
+        "education": [
             "Bachelor of Science, from Kuvempu University (2008-2011)",
         ],
-        "Additional Qualifications": [
+        "additionalQualifications": [
             "Hardware & Network Engineering Course in Goal Information Technology.",
             "PC Hardware, Basic Networking Certification.",
             "CCNA (Cisco Certified Network Associate).",
@@ -52,10 +57,10 @@ const PreviewResume = () => {
         <Container>
             <Row className="mb-3" >
                 <Col md={8} >
-                    <h2>{data.name}</h2>
+                    <h2>{data.firstName} {data.lastName}</h2>
                 </Col>
                 <Col md={4} >
-                    <Row className="justify-content-end" >{data.phoneNo}</Row>
+                    <Row className="justify-content-end" >{data.phoneNumber}</Row>
                     <Row className="justify-content-end">{data.email}</Row>
                 </Col>
             </Row>
@@ -68,8 +73,8 @@ const PreviewResume = () => {
                 <Col>
                     <h5>Key Skills</h5>
                     <ul>
-                        {data['Key Skills'].map((item, index) => (
-                            <li>{item}</li>
+                        {data['keySkills'].map((item, index) => (
+                            <li key={index}>{item}</li>
                         ))}
                     </ul>
                 </Col>
@@ -78,16 +83,16 @@ const PreviewResume = () => {
                 <Col>
                     <h5>Professional Experience</h5>
 
-                    {data['Professional Experience'].map((experience, index) => (
-                        <div>
+                    {data['professionalExperience'].map((experience, experienceIndex) => (
+                        <div key={experienceIndex}>
                             <h6>{experience.company_name}</h6>
 
-                            {experience.work.map((item, index) => (
-                                <div>
+                            {experience.work.map((item, workIndex) => (
+                                <div key={workIndex}>
                                     <h6>{item.designation}</h6>
                                     <ul>
-                                        {item.work_details.map((workDetail, index) => (
-                                            <li>{workDetail}</li>))
+                                        {item.work_details.map((workDetail, workDetailIndex) => (
+                                            <li key={workDetailIndex}>{workDetail}</li>))
                                         }
                                     </ul>
                                 </div>
@@ -100,8 +105,8 @@ const PreviewResume = () => {
                 <Col>
                     <h5>Education</h5>
                     <ul>
-                        {data["Education"].map((item, index) => (
-                            <li>{item}</li>))
+                        {data["education"].map((item, index) => (
+                            <li key={index}>{item}</li>))
                         }
                     </ul>
                 </Col>
@@ -110,8 +115,8 @@ const PreviewResume = () => {
                 <Col>
                     <h5>Additional Qualifications</h5>
                     <ul>
-                        {data["Additional Qualifications"].map((item, index) => (
-                            <li>{item}</li>))
+                        {data["additionalQualifications"].map((item, index) => (
+                            <li key={index}>{item}</li>))
                         }
                     </ul>
                 </Col>

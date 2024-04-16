@@ -23,7 +23,6 @@ input[type="file"] {
   font-size: 18px;
   font-weight: bold;
 }
-
 .form {
   display: flex;
   flex-direction: column;
@@ -46,3 +45,4 @@ input[type="file"] {
 .form > label:last-of-type {
   margin-bottom: 16px;
 }
+

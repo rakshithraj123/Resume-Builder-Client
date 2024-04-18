@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap'
-import styles from "./KeySkillsForm.module.css";
+import styles from "./CreateResume.module.css";
 
 const KeySkillsForm = (props) => {
   return (
@@ -26,7 +26,7 @@ const KeySkillsForm = (props) => {
               </Col>
               <Col xs="auto">
                 {
-                  <Button variant="danger" 
+                  <Button variant="danger"  className={styles.removeButton}  
                     onClick={(e) => props.removeKeySkills(e, index)}
                     disabled={(props.keySkills.length == 1)}>
                     Remove
@@ -34,7 +34,7 @@ const KeySkillsForm = (props) => {
 
                 }
                 {
-                  <Button variant="success" style={{ marginLeft: '10px' }}
+                  <Button  variant="success"  className={styles.addButton} 
                     onClick={(e) => props.addKeySkills()}
                     disabled={!(index == props.keySkills.length - 1 && props.keySkills.length < 10)} >
                     Add

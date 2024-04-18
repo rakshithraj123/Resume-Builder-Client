@@ -1,9 +1,10 @@
 import React from 'react'
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap'
+import styles from "./CreateResume.module.css";
 
 const WorkForm = (props) => {
     return (
-        <Col style={{ backgroundColor: '#3aa48a', padding: "10px", marginBottom: "30px" }} >
+        <Col className={styles.workForm} >
             <Form.Group controlId={props.workIndex} >
                 <Form.Control
                     placeholder="Enter Designation"

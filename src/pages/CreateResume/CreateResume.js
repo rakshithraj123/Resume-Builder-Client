@@ -12,7 +12,7 @@ import {
   } from '../../constants'
 
 const CreateResume = ({handleNavigation}) => {
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(2);
 
     const [formData, setFormData] = useState({
         firstName: 'RAVIKUMAR',
@@ -111,7 +111,7 @@ const CreateResume = ({handleNavigation}) => {
         e.preventDefault();
         // Add logic to handle form submission, e.g., send data to backend
         let data = JSON.stringify(formData)
-       // handleNavigation(PREVIEW_RESUME_MENU,formData)
+        //handleNavigation(PREVIEW_RESUME_MENU,formData)
     };
 
     // Function to handle moving to the next step

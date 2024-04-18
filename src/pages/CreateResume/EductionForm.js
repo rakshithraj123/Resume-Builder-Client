@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap'
+import styles from "./CreateResume.module.css";
 
 const EductionForm = (props) => {
   return (
@@ -26,7 +27,7 @@ const EductionForm = (props) => {
               <Col xs="auto">
 
                 {
-                  <Button variant="danger" 
+                  <Button variant="danger" className={styles.removeButton} 
                     onClick={(e) => props.removeEducation(e, index)}
                     disabled={(props.education.length == 1)}>
                     Remove
@@ -34,7 +35,7 @@ const EductionForm = (props) => {
 
                 }
                 {
-                  <Button variant="success" style={{ marginLeft: '10px' }}
+                  <Button variant="success" className={styles.addButton} 
                     onClick={(e) =>  props.addEducation() }
                     disabled={!(index == props.education.length - 1 && props.education.length < 10)} >
                     Add

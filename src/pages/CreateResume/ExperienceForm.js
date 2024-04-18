@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap'
 import WorkForm from './WorkForm'
+import styles from "./CreateResume.module.css";
 
 const ExperienceForm = (props) => {
     return (
@@ -47,7 +48,7 @@ const ExperienceForm = (props) => {
                             </Col>
                             <Col xs="auto">
                                 {
-                                    <Button variant="danger"
+                                    <Button variant="danger" className={styles.removeButton} 
                                         onClick={(e) => props.removeExperience(e, index)}
                                         disabled={(props.professionalExperience.length == 1)}>
                                         Remove
@@ -55,7 +56,7 @@ const ExperienceForm = (props) => {
 
                                 }
                                 {
-                                    <Button variant="success" style={{ marginLeft: '10px' }}
+                                    <Button variant="success" className={styles.addButton} 
                                         onClick={(e) => props.addExperience()}
                                         disabled={!(index == props.professionalExperience.length - 1 && props.professionalExperience.length < 10)} >
                                         Add

@@ -1,23 +1,32 @@
 // css
 import styles from './Landing.module.css'
 import { Container, Row, Col, ListGroup, Card } from 'react-bootstrap'
-import { useState } from 'react';
-import ResumeTemplate  from '../../components/ResumeTemplate';
+import { useState, useEffect } from 'react';
+import ResumeTemplate from '../../components/ResumeTemplate';
 import {
-  CREATE_RESUME_MENU ,PREVIEW_RESUME_MENU
+  CREATE_RESUME_MENU, PREVIEW_RESUME_MENU
 } from '../../constants'
+import { useMediaQuery } from '@react-hook/media-query';
 
-const Landing = ({ user,handleNavigation }) => {
+const Landing = ({ user, handleNavigation }) => {
   const [items, setItems] = useState([
-    {"image":"/assets/icons/logo512.png","name":"templete  1j"},
-    {"image":"/assets/icons/logo512.png","name":"templete  2"},
-    {"image":"/assets/icons/logo512.png","name":"templete  3"},
-    ]);
+    { "image": "/icons/resume_template_1.png", "name": "templete  1j" },
+    { "image": "/icons/resume_template_1.png", "name": "templete  2" },
+    { "image": "/icons/resume_template_1.png", "name": "templete  3" },
+  ]);
 
-    const handleTempleteSelected = (templete) => {
-      console.log('handleTempleteSelected ***');
-      handleNavigation(CREATE_RESUME_MENU)
-    };
+  const handleTempleteSelected = (templete) => {
+    console.log('handleTempleteSelected ***');
+    handleNavigation(CREATE_RESUME_MENU)
+  };
+
+
+  const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  const [horizontalLayout, setHorizontalLayout] = useState(false);
+
+  useEffect(() => {
+    setHorizontalLayout(!isSmallScreen);
+  }, [isSmallScreen]);
 
   return (
 
@@ -32,13 +41,31 @@ const Landing = ({ user,handleNavigation }) => {
         <Card.Text style={{ textAlign: 'center' }} className="d-flex justify-content-center">
           Select your templete
         </Card.Text>
-        <ListGroup className="justify-content-sm-center" horizontal>
-          {items.map((item, index) => (
-            <ListGroup.Item key={index} style={{margin:"20px",backgroundColor:"#700"}}>
-              <ResumeTemplate  imagePath={item.image} name={item.name} onClick={() => handleTempleteSelected(item)}/>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
+        {horizontalLayout ? (
+          <Row>
+            <Col>
+              <ListGroup horizontal className="justify-content-sm-center">
+                {items.map((item, index) => (
+                  <ListGroup.Item key={index} style={{ margin: "20px", backgroundColor: "#700",width:'550px' }}>
+                    <ResumeTemplate imagePath={item.image} name={item.name} onClick={() => handleTempleteSelected(item)} />
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Col>
+          </Row>
+        ) : (
+          <Row>
+            <Col>
+              <ListGroup className="justify-content-sm-center">
+                {items.map((item, index) => (
+                  <ListGroup.Item key={index} style={{ margin: "20px", backgroundColor: "#700" ,width:'550px'}}>
+                    <ResumeTemplate imagePath={item.image} name={item.name} onClick={() => handleTempleteSelected(item)} />
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Col>
+          </Row>
+        )}
       </Container>
     </div>
   )

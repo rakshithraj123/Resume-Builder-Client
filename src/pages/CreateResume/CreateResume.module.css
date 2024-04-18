@@ -1,0 +1,21 @@
+.addButton {
+  margin-left: 10px;
+  border: none !important;
+  color: white !important;
+}
+
+/* You can add more custom styles as needed */
+
+
+.removeButton {
+  border: none !important;
+  border-color: #e11912;
+  color: white !important;
+  /* You can add more custom styles as needed */
+}
+
+.workForm {
+  background-color: #3aa48a;
+  padding: 10px;
+  margin-bottom: 30px;
+}

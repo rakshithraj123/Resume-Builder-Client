@@ -21,7 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 function AppRoutes() {
   const [user, setUser] = useState(userService.getUser())
   const navigate = useNavigate()
-
+  const location = useLocation();
 
   const handleLogout = () => {
     userService.logout()
@@ -51,7 +51,6 @@ function AppRoutes() {
  
 
   const getIntialMenu = () => {
-    const location = useLocation();
     switch(location.pathname){
       case LOG_IN_PATH :  return LOG_IN_MENU
       case SIGN_UP_PATH:  return SIGN_UP_MENU       

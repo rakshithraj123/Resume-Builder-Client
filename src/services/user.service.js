@@ -16,7 +16,7 @@ export const userService = {
 
     var requestData = JSON.stringify({
       "email": data.email,
-      "password": hashString(data.password)
+      "password": data.password
     });
     let response = null
     response = await AppService.makeRequest(BASE_API_URL + LOGIN, {
@@ -26,8 +26,8 @@ export const userService = {
     })
 
     let jsonResponse = response
-    if (jsonResponse.token)
-      tokenService.setSessionToken(jsonResponse.token)
+    if (jsonResponse.data.User.token)
+      tokenService.setSessionToken(jsonResponse.data.User.token)
     console.log(tokenService.getSessionToken())
     return jsonResponse
   },

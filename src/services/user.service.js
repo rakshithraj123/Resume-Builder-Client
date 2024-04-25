@@ -1,7 +1,7 @@
 
 import { AppService, HTTPHeaders } from '.'
 import * as tokenService from './tokenService'
-import bcrypt from 'bcryptjs';
+import aes from 'crypto-js/aes';
 
 import {
   BASE_API_URL,
@@ -16,9 +16,10 @@ export const userService = {
 
     var requestData = JSON.stringify({
       "email": data.email,
-      "password": data.password
+      "password": hashString(data.password)                                                                                                                                                                                           
     });
     let response = null
+    console.log(requestData);
     response = await AppService.makeRequest(BASE_API_URL + LOGIN, {
       ...options,
       ...HTTPHeaders(),
@@ -61,9 +62,17 @@ export const userService = {
   },
 }
 
-const hashString = (textToHash) => {
+/*const hashString = (textToHash) => {
   const saltRounds = 10
   const hash = bcrypt.hashSync(textToHash, saltRounds);
   console.log(hash);
   return hash;
+}*/
+
+
+const hashString = (plainText) => {
+  const secretKey = "ReactNodejs"
+  const cipherText = aes.encrypt(plainText, secretKey).toString()
+  console.log(cipherText);
+  return cipherText
 }

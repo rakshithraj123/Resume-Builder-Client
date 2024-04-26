@@ -32,8 +32,7 @@ export const AppService = {
   makeRequest: async (url, requestOptions) => {
   console.log(url)
     const response = await fetch(url, requestOptions)
-    let result = null
-
+    let result = null 
     if (!(response.error && response.error.name === 'AbortError')) {
       try {
         result = await response.json()

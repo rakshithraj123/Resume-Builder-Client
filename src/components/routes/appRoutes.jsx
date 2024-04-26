@@ -36,7 +36,7 @@ function AppRoutes() {
       case SIGN_UP_MENU : return  navigate("/auth/signup")           
       case HOME_MENU : return  navigate("/")
       case CREATE_RESUME_MENU : return  navigate("/createResume")
-      case PREVIEW_RESUME_MENU : return  navigate("/previewResume", { state: { data: data } })
+      case PREVIEW_RESUME_MENU : return  navigate("/previewResume", { state: { resumeId: data } })
       default: return  navigate("/")
     }
      }

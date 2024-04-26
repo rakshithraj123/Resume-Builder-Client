@@ -14,6 +14,7 @@ import { HOME_MENU } from "../../constants";
 
 const CreateResume = ({ handleNavigation }) => {
   const [step, setStep] = useState(2);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "RAVIKUMAR",
@@ -132,6 +133,7 @@ const CreateResume = ({ handleNavigation }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true)
     // Add logic to handle form submission, e.g., send data to backend
     let data = JSON.stringify(formData);
     resumeAddService
@@ -139,16 +141,18 @@ const CreateResume = ({ handleNavigation }) => {
       .then((response) => {
         // console.log(response)
         if (response.status) {
-           // toast("Resume creation successful");
-            //
-            handleNavigation(PREVIEW_RESUME_MENU,response.data.Resume._id)
+          // toast("Resume creation successful");
+          //
+          handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id)
         } else if (response.status == false) {
-            toast(response.message);
+          toast(response.message);
         }
       })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(() => {
+        setLoading(false)
+      })
   };
 
   // Function to handle moving to the next step
@@ -263,6 +267,15 @@ const CreateResume = ({ handleNavigation }) => {
     experience[index].work[workIndex].work_details.splice(workDetailIndex, 1);
     setFormData({ ...formData, professionalExperience: experience });
   };
+
+  if (loading)
+    return (
+      <div class="text-center" style={{ height: "calc(100vh - 100px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
+        <div class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+    );
 
   return (
     <div>

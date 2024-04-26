@@ -48,7 +48,7 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
       })
       .catch((err) => {
         console.log(err);
-        setMessage(err.error);
+        setMessage(err.message);
         setLoading(false);
       });
   };

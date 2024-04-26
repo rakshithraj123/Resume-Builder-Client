@@ -1,147 +1,146 @@
-import React from 'react';
-import { Button, Container, Row, Col, ListGroup } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Spinner,
+} from "react-bootstrap";
 import styles from "./PreviewResume.module.css";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
+import { resumeAddService } from "../../services/resumeAdd.service";
+import { toast } from "react-toastify";
 
 const PreviewResume = ({ handleNavigation }) => {
-    const { state } = useLocation();
-    const data = state?.data;
-    console.log(JSON.stringify(data))
+  const { state } = useLocation();
+  const resumeId = state?.resumeId;
+  const [resumeData, setResumeData] = useState({});
 
-    let data_ = {
-        "firstName": 'RAVIKUMAR',
-        "lastName": 'HIREMATH',
-        "phoneNumber": "+91 97432 17925",
-        "email": "ravikumar.h@glowtouch.com",
-        "objective": "Experienced Service Delivery Professional with a strong background in Customer Support industry. Skilled in leading cross-functional teams, fostering client relationships, and implementing strategies to optimize service delivery and enhance customer satisfaction. Exceptional communicator with a focus on aligning business objectives with service delivery excellence.",
-        "keySkills": ["Strong leadership and team management abilities",
-            "Strategic thinker with a focus on continuous improvement",
-            "Customer-centric approach to service delivery"],
-        "professionalExperience": [
-            {
-                "company_name": "GlowTouch Technologies Pvt. Ltd (From Aug 2009 till date)",
-                "work": [{
-                    "designation": "Team Leader (Feb 2022 - Present)",
-                    "work_details": [
-                        "Working on ServiceNow, JIRA, Polaris, SalesForce, Pega Genesis Cloud, Tableau\, CSES",
-                        "Creating and updating Release Incident Management using ServiceNow tool",
-                        "Ensuring performance of services within agreed Service Level Agreements (SLAs) ",
-                        "Experience with JIRA environments with ability to create JIRA workflow",
-                    ]
-                }]
-            },
-            {
-                "company_name": "Technologies Pvt. Ltd (From Aug 2009 till date)",
-                "work": [{
-                    "designation": "Team Leader (Feb 2022 - Present)",
-                    "work_details": [
-                        "Working on ServiceNow, JIRA, Polaris, SalesForce, Pega Genesis Cloud, Tableau\, CSES",
-                        "Creating and updating Release Incident Management using ServiceNow tool",
-                        "Ensuring performance of services within agreed Service Level Agreements (SLAs) ",
-                        "Experience with JIRA environments with ability to create JIRA workflow",
-                    ]
-                }]
-            }
-        ],
-        "education": [
-            "Bachelor of Science, from Kuvempu University (2008-2011)",
-        ],
-        "additionalQualifications": [
-            "Hardware & Network Engineering Course in Goal Information Technology.",
-            "PC Hardware, Basic Networking Certification.",
-            "CCNA (Cisco Certified Network Associate).",
-        ]
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await resumeAddService.fetch(resumeId);
+        console.log(response);
 
+        if (response.status) {
+          setResumeData(response.data.Resume.content);
+        } else {
+          toast("Fail to fetch resume");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        // Handle error
+      }
+    };
+    fetchData();
+  }, []);
 
-    const printResume = (e) => {
-        e.preventDefault()
-        const contentToPrint = document.getElementById('content-to-print');
-        const originalContents = document.body.innerHTML;
-        document.body.innerHTML = contentToPrint.innerHTML;
-        window.print();
-        //document.body.innerHTML = originalContents;
-        window.location.reload();
-    }
+  const printResume = (e) => {
+    e.preventDefault();
+    const contentToPrint = document.getElementById("content-to-print");
+    const originalContents = document.body.innerHTML;
+    document.body.innerHTML = contentToPrint.innerHTML;
+    window.print();
+    //document.body.innerHTML = originalContents;
+    window.location.reload();
+  };
 
-    return (<div >
-        <Container >
-            <div id="content-to-print" >
-                <Row className="mb-3" >
-                    <Col  >
-                        <h2>{data.firstName} {data.lastName}</h2>
-                    </Col>
-                    <Col xs="auto" style={{marginRight:"10px"}}>
-                        <Row className="justify-content-end" >{data.phoneNumber}</Row>
-                        <Row className="justify-content-end">{data.email}</Row>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <p>{data.objective}</p>
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <Col>
-                        <h5>Key Skills</h5>
-                        <ul>
-                            {data['keySkills'].map((item, index) => (
-                                <li key={index}>{item}</li>
-                            ))}
-                        </ul>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <h5>Professional Experience</h5>
-
-                        {data['professionalExperience'].map((experience, experienceIndex) => (
-                            <div key={experienceIndex}>
-                                <h6>{experience.company_name}</h6>
-
-                                {experience.work.map((item, workIndex) => (
-                                    <div key={workIndex}>
-                                        <h6>{item.designation}</h6>
-                                        <ul>
-                                            {item.work_details.map((workDetail, workDetailIndex) => (
-                                                <li key={workDetailIndex}>{workDetail}</li>))
-                                            }
-                                        </ul>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <h5>Education</h5>
-                        <ul>
-                            {data["education"].map((item, index) => (
-                                <li key={index}>{item}</li>))
-                            }
-                        </ul>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <h5>Additional Qualifications</h5>
-                        <ul>
-                            {data["additionalQualifications"].map((item, index) => (
-                                <li key={index}>{item}</li>))
-                            }
-                        </ul>
-                    </Col>
-                </Row>
+  return (
+    <div>
+      <Container>
+        {Object.keys(resumeData).length === 0 ? (
+          <div class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only"></span>
             </div>
-            <Row className="mb-3 | justify-content-end" xs="auto">
-                <Button variant="primary" onClick={(e) => printResume(e)} >
-                    Print
-                </Button>
+          </div>
+        ) : (
+          <div id="content-to-print">
+            <Row className="mb-3">
+              <Col>
+                <h2>
+                  {resumeData.firstName} {resumeData.lastName}
+                </h2>
+              </Col>
+              <Col xs="auto" style={{ marginRight: "10px" }}>
+                <Row className="justify-content-end">
+                  {resumeData.phoneNumber}
+                </Row>
+                <Row className="justify-content-end">{resumeData.email}</Row>
+              </Col>
             </Row>
+            <Row>
+              <Col>
+                <p>{resumeData.objective}</p>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col>
+                <h5>Key Skills</h5>
+                <ul>
+                  {resumeData["keySkills"].map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <h5>Professional Experience</h5>
 
-        </Container>
-    </div>)
-}
+                {resumeData["professionalExperience"].map(
+                  (experience, experienceIndex) => (
+                    <div key={experienceIndex}>
+                      <h6>{experience.company_name}</h6>
 
-export default PreviewResume
+                      {experience.work.map((item, workIndex) => (
+                        <div key={workIndex}>
+                          <h6>{item.designation}</h6>
+                          <ul>
+                            {item.work_details.map(
+                              (workDetail, workDetailIndex) => (
+                                <li key={workDetailIndex}>{workDetail}</li>
+                              )
+                            )}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  )
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <h5>Education</h5>
+                <ul>
+                  {resumeData["education"].map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <h5>Additional Qualifications</h5>
+                <ul>
+                  {resumeData["additionalQualifications"].map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              </Col>
+            </Row>
+          </div>
+        )}
+        <Row className="mb-3 | justify-content-end" xs="auto">
+          <Button variant="primary" onClick={(e) => printResume(e)}>
+            Print
+          </Button>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default PreviewResume;

@@ -11,12 +11,15 @@ import { PREVIEW_RESUME_MENU } from "../../constants";
 import { resumeAddService } from "../../services/resumeAdd.service";
 import { toast } from "react-toastify";
 import { HOME_MENU } from "../../constants";
+import { useLocation } from "react-router-dom";
 
 const CreateResume = ({ handleNavigation }) => {
-  const [step, setStep] = useState(2);
+  const { state } = useLocation();
+
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const dummyData = {
     firstName: "RAVIKUMAR",
     lastName: "HIREMATH",
     email: "avikumar.h@glowtouch.com",
@@ -68,7 +71,9 @@ const CreateResume = ({ handleNavigation }) => {
     ],
 
     // Add more fields as needed
-  });
+  };
+  const [formData, setFormData] = useState(state?.resumeData? state?.resumeData : {})
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

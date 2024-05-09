@@ -11,6 +11,9 @@ import styles from "./PreviewResume.module.css";
 import { useLocation } from "react-router-dom";
 import { resumeAddService } from "../../services/resumeAdd.service";
 import { toast } from "react-toastify";
+import {
+  CREATE_RESUME_MENU
+} from '../../constants'
 
 const PreviewResume = ({ handleNavigation }) => {
   const { state } = useLocation();
@@ -33,7 +36,12 @@ const PreviewResume = ({ handleNavigation }) => {
         // Handle error
       }
     };
-    fetchData();
+    if(resumeId == null){
+      handleNavigation()
+    }else{
+      fetchData();
+    }
+    
   }, []);
 
   const printResume = (e) => {
@@ -46,11 +54,17 @@ const PreviewResume = ({ handleNavigation }) => {
     window.location.reload();
   };
 
+  const goToResumeEdit = (e) => {
+    e.preventDefault();
+    handleNavigation(CREATE_RESUME_MENU,{resumeData :resumeData})
+  };
+
+  
   return (
     <div>
       <Container>
         {Object.keys(resumeData).length === 0 ? (
-          <div class="text-center"  style={{height:"calc(100vh - 100px)",justifyContent:'center',alignItems:"center",display:"flex"}}>
+          <div class="text-center" style={{ height: "calc(100vh - 100px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
             <div class="spinner-border" role="status">
               <span class="sr-only"></span>
             </div>
@@ -134,9 +148,14 @@ const PreviewResume = ({ handleNavigation }) => {
           </div>
         )}
         <Row className="mb-3 | justify-content-end" xs="auto">
-          <Button variant="primary" onClick={(e) => printResume(e)}>
+          <Col>
+            <Button variant="primary" onClick={(e) => goToResumeEdit(e)}>
+              Edit
+            </Button>
+          </Col>
+          <Col><Button variant="primary" onClick={(e) => printResume(e)}>
             Print
-          </Button>
+          </Button></Col>
         </Row>
       </Container>
     </div>

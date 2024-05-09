@@ -76,7 +76,7 @@ function AppRoutes() {
               path="/"
               element={
                 <ProtectedRoute user={user}>
-                  <Landing user={user} handleNavigation={handleNavigation} />
+                  <App />
                 </ProtectedRoute>
               }
             />
@@ -85,7 +85,7 @@ function AppRoutes() {
             path="/"
             element={
               <ProtectedRoute user={user}>
-                  <App />
+                  <Landing user={user} handleNavigation={handleNavigation} />
               </ProtectedRoute>
             }
           />

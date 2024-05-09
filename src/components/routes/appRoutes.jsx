@@ -17,9 +17,11 @@ import {
 } from '../../constants'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import App from '../../pages/admin/Admin'
 
 function AppRoutes() {
   const [user, setUser] = useState(userService.getUser())
+  const [isAdmin, setAdmin] = useState(false)
   const navigate = useNavigate()
   const location = useLocation();
 
@@ -68,14 +70,26 @@ function AppRoutes() {
       <NavBar user={user} handleLogout={handleLogout}  activeMenu={activeMenu}  handleMenuChange={handleMenuChange}/>
         <div > 
           <Routes>
+          {
+            isAdmin?
             <Route
               path="/"
               element={
                 <ProtectedRoute user={user}>
-                  <Landing user={user} handleNavigation={handleNavigation}/>
+                  <Landing user={user} handleNavigation={handleNavigation} />
                 </ProtectedRoute>
               }
             />
+            :
+            <Route
+            path="/"
+            element={
+              <ProtectedRoute user={user}>
+                  <App />
+              </ProtectedRoute>
+            }
+          />
+          }
 
             <Route
               path="/createResume"

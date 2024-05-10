@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { HOME_MENU } from "../../constants";
 import { useLocation } from "react-router-dom";
 import { setResumeId} from '../../redux/'
+import Resume from "./Resume";
 
 const CreateResume = ({ handleNavigation }) => {
   const { state } = useLocation();
@@ -73,7 +74,8 @@ const CreateResume = ({ handleNavigation }) => {
 
     // Add more fields as needed
   };
-  const [formData, setFormData] = useState(state?.resumeData? state?.resumeData : dummyData)
+  const resume = new Resume()
+  const [formData, setFormData] = useState(state?.resumeData? state?.resumeData : resume)
 
 
   const handleChange = (e) => {

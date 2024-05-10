@@ -32,3 +32,9 @@ export const clearDataTask = () => {
         type: actionTypes.CLEAR_DATA,
     };
 };
+export const setLoggedInTask = (isLoggedIn) => {
+    return {
+        type: actionTypes.LOG_IN,
+        payload: {"isLoggedIn":isLoggedIn},
+    };
+};

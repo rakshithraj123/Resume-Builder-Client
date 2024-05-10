@@ -1,8 +1,8 @@
 // npm modules
 import { Navigate } from 'react-router-dom'
 
-const ProtectedRoute = ({ user, children }) => {
-  if (!user) return <Navigate to="/auth/login" />
+const ProtectedRoute = ({ isLoggedIn, children }) => {
+  if (!isLoggedIn) return <Navigate to="/auth/login" />
   return children
 }
 

@@ -1,8 +1,8 @@
 // npm modules
 import { Navigate } from 'react-router-dom'
 
-const PublicRoute = ({ user, children }) => {
-  if (user) return <Navigate to="/" />
+const PublicRoute = ({ isLoggedIn, children }) => {
+  if (isLoggedIn) return <Navigate to="/" />
   return children
 }
 

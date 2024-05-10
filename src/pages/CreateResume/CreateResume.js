@@ -1,5 +1,5 @@
 import { Container, Card, Form, Button, Row, Col } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import BasicDetailForm from "./BasicDetailForm";
 import KeySkillsForm from "./KeySkillsForm";
@@ -14,6 +14,7 @@ import { HOME_MENU } from "../../constants";
 import { useLocation } from "react-router-dom";
 import { setResumeId} from '../../redux/'
 import Resume from "./Resume";
+import { getResumeId} from '../../redux/selectors'
 
 const CreateResume = ({ handleNavigation }) => {
   const { state } = useLocation();
@@ -78,6 +79,13 @@ const CreateResume = ({ handleNavigation }) => {
   const [formData, setFormData] = useState(state?.resumeData? state?.resumeData : resume)
 
 
+  useEffect(() => {
+   if(getResumeId()!= null && (state?.resumeData) == null ){
+        handleNavigation(HOME_MENU)
+   }
+  }, []);
+  
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

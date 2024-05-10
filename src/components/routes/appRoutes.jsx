@@ -18,14 +18,14 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import App from '../../pages/admin/Admin'
-import { getResumeIdState,getIsAdminState} from '../../redux/'
+import { getResumeIdState,getIsAdminState,getLoggInStateState} from '../../redux/'
 import { useSelector } from 'react-redux';
 
 function AppRoutes() {
   const [user, setUser] = useState(userService.getUser())
   const isAdmin = useSelector(state => getIsAdminState(state)); 
-  console.log("isAdmin "+isAdmin)
   const resumeId = useSelector(state => getResumeIdState(state)); 
+  const isLoggedIn = useSelector(state => getLoggInStateState(state)); 
 
   console.log("resumeId " +resumeId)
   const navigate = useNavigate()
@@ -62,9 +62,9 @@ function AppRoutes() {
     switch (location.pathname) {
       case LOG_IN_PATH: return LOG_IN_MENU
       case SIGN_UP_PATH: return SIGN_UP_MENU
-      case HOME_PATH: return user ? HOME_MENU : LOG_IN_MENU
-      case CREATE_RESUME_PATH: return user ? HOME_MENU : LOG_IN_MENU
-      case PREVIEW_RESUME_PATH: return user ? HOME_MENU : LOG_IN_MENU
+      case HOME_PATH: return isLoggedIn ? HOME_MENU : LOG_IN_MENU
+      case CREATE_RESUME_PATH: return isLoggedIn ? HOME_MENU : LOG_IN_MENU
+      case PREVIEW_RESUME_PATH: return isLoggedIn ? HOME_MENU : LOG_IN_MENU
       default: return HOME_MENU
     }
   }
@@ -81,7 +81,7 @@ function AppRoutes() {
               <Route
                 path="/"
                 element={
-                  <ProtectedRoute user={user}>
+                  <ProtectedRoute isLoggedIn={isLoggedIn}>
                     <App />
                   </ProtectedRoute>
                 }
@@ -91,7 +91,7 @@ function AppRoutes() {
                 <Route
                   path="/"
                   element={
-                    <ProtectedRoute user={user}>
+                    <ProtectedRoute isLoggedIn={isLoggedIn}>
                       <PreviewResume handleNavigation={handleNavigation} savedResumeId ={resumeId} />
                     </ProtectedRoute>
                   }
@@ -99,7 +99,7 @@ function AppRoutes() {
                 <Route
                   path="/"
                   element={
-                    <ProtectedRoute user={user}>
+                    <ProtectedRoute isLoggedIn={isLoggedIn}>
                       <CreateResume handleNavigation={handleNavigation} />
                     </ProtectedRoute>
                   }
@@ -111,8 +111,8 @@ function AppRoutes() {
           {/* <Route
             path="/"
             element={
-              <ProtectedRoute user={user}>
-                  <Landing user={user} handleNavigation={handleNavigation} />
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <Landing isLoggedIn={isLoggedIn} handleNavigation={handleNavigation} />
               </ProtectedRoute>
             }
           /> */}
@@ -120,7 +120,7 @@ function AppRoutes() {
           <Route
             path="/createResume"
             element={
-              <ProtectedRoute user={user}>
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <CreateResume handleNavigation={handleNavigation} />
               </ProtectedRoute>
             }
@@ -129,7 +129,7 @@ function AppRoutes() {
           <Route
             path="/previewResume"
             element={
-              <ProtectedRoute user={user}>
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <PreviewResume handleNavigation={handleNavigation} />
               </ProtectedRoute>
             }
@@ -138,7 +138,7 @@ function AppRoutes() {
           <Route
             path="/auth/login"
             element={
-              <PublicRoute user={user}>
+              <PublicRoute isLoggedIn={isLoggedIn}>
                 <Login handleAuthEvt={handleAuthEvt} handleNavigation={handleNavigation} />
               </PublicRoute>
             }
@@ -147,7 +147,7 @@ function AppRoutes() {
           <Route
             path="/auth/signup"
             element={
-              <PublicRoute user={user}>
+              <PublicRoute isLoggedIn={isLoggedIn}>
                 <Signup handleAuthEvt={handleAuthEvt} handleNavigation={handleNavigation} />
               </PublicRoute>
             }

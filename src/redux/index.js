@@ -36,6 +36,14 @@ export const getIsAdminState = (state) => {
   return  state.auth.isAdmin;
 }
 
+export const setLoggedIn = (isLoggedIn) => {
+  store.dispatch(actionCreators.setLoggedInTask(isLoggedIn));
+}
+
+export const getLoggInStateState= (state) => {
+  return state.auth.isLoggedIn;
+};
+
 
 
 

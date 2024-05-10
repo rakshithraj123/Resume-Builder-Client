@@ -46,3 +46,22 @@ input[type="file"] {
 .form > label:last-of-type {
   margin-bottom: 16px;
 }
+
+.dropDownLabel {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.dropDownSelect {
+  width: calc(80% - 58px); 
+  height: 2.4rem;
+  padding: 0.5rem 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #767676;
+  border-radius: 2px;
+  box-sizing: border-box;
+  margin-left: 14px;
+}

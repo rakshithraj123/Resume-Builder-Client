@@ -14,10 +14,10 @@ export const decrementTask = () => {
     };
 };
 
-export const setTokenTask = (token) => {
+export const setTokenTask = (token, isAdmin) => {
     return {
         type: actionTypes.SET_TOKEN,
-        payload: {"token":token},
+        payload: {"token":token, "isAdmin":isAdmin },
     };
 };
 

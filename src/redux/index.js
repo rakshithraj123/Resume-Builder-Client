@@ -13,8 +13,8 @@ export const decrementCounter = () => {
 
 };
 
-export const setToken = (token) => {
-  store.dispatch(actionCreators.setTokenTask(token));
+export const setToken = (token, isAdmin) => {
+  store.dispatch(actionCreators.setTokenTask(token, isAdmin));
 };
 
 export const removeToken = () => {

@@ -2,7 +2,8 @@ import * as actionTypes from '../ActionTypes';
 
 const initialState = {
   isLoggedIn: false,
-  token: null
+  token: null,
+  isAdmin: false
 };
 
 const AuthReducer = (state = initialState, action) => {
@@ -10,7 +11,7 @@ const AuthReducer = (state = initialState, action) => {
     case actionTypes.LOG_IN:
       return { ...state, isLoggedIn: true };
     case actionTypes.SET_TOKEN:
-      return { ...state, token: action.payload.token };
+      return { ...state, token: action.payload.token, isAdmin: action.payload.isAdmin };
     case actionTypes.REMOVE_TOKEN:
       return { ...state, token: null};
     default:

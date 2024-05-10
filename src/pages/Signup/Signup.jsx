@@ -21,9 +21,17 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
     password: "",
     passwordConf: "",
     phoneNumber: "",
+    designation: "",
   });
   const [photoData, setPhotoData] = useState({ photo: null });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const designationOptions = [
+    "Analyst",
+    "Juinor Engineer",
+    "Engineer",
+    "Senior Engineer",
+    "Manager",
+  ];
 
   const handleChange = (evt) => {
     setMessage("");
@@ -129,11 +137,22 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
       return "Invalid phone number";
     }
 
+    if (designation === "" || designation === "Select Designation") {
+      return "Select designation from drop down";
+    }
+
     return true;
   };
 
-  const { firstName, lastName, email, password, passwordConf, phoneNumber } =
-    formData;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    passwordConf,
+    phoneNumber,
+    designation,
+  } = formData;
 
   const isFormInvalid = () => {
     return !(
@@ -142,7 +161,8 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
       email &&
       password &&
       password === passwordConf &&
-      phoneNumber
+      phoneNumber &&
+      (designation !== "" || designation !== "Select Designation")
     );
   };
 
@@ -212,6 +232,22 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
             onChange={handleChange}
             maxLength={10}
           />
+        </label>
+        <label className={styles.dropDownLabel}>
+          Designation         
+          <select
+            value={designation}
+            name="designation"
+            onChange={handleChange}
+            className={styles.dropDownSelect}
+          >
+            <option value="">Select Designation</option>
+            {designationOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
         </label>
         {/* <label className={styles.label}>
           Upload Photo

@@ -34,7 +34,7 @@ function isAdminRole(token) {
 }
 
 function getUserFromToken() {
-  const token = getToken()
+  const token = getSessionToken()
   let user =  token ? jwtDecode(token).users : null
   console.log(user)
   return token ? user : null

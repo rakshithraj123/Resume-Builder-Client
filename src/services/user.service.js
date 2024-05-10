@@ -32,7 +32,6 @@ export const userService = {
        tokenService.setSessionToken(jsonResponse.data.User.token)
          
     }
-    console.log(tokenService.getSessionToken())
     return jsonResponse
   },
   getUser: () => {

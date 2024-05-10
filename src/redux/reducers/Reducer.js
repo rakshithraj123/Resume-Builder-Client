@@ -1,16 +1,16 @@
 import * as actionTypes from '../ActionTypes';
 
 const initialState = {
-    counter: 0
+    resumeId: null
   };
   
   const ResumeBuilder = (state = initialState, action) => {
     switch (action.type) {
-      case actionTypes.INCREMENT:
-        console.log(" counterReducer increment")
-        return { ...state, counter: state.counter + 1 };
-      case actionTypes.DECREMENT:
-        return { ...state, counter: state.counter - 1 };
+      case actionTypes.SET_RESUME_ID:
+        console.log("SET_RESUME_ID "+action.payload.resumeId )
+        return { ...state, resumeId: action.payload.resumeId };
+      case actionTypes.CLEAR_RESUME_ID:
+        return { ...state, resumeId: null };
       default:
         return state;
     }

@@ -15,9 +15,12 @@ import {
   CREATE_RESUME_MENU
 } from '../../constants'
 
-const PreviewResume = ({ handleNavigation }) => {
+const PreviewResume = ({ handleNavigation,savedResumeId }) => {
   const { state } = useLocation();
-  const resumeId = state?.resumeId;
+  let resumeId = state?.resumeId;
+  if(resumeId == null){
+    resumeId = savedResumeId
+  }
   const [resumeData, setResumeData] = useState({});
 
   useEffect(() => {
@@ -64,9 +67,9 @@ const PreviewResume = ({ handleNavigation }) => {
     <div>
       <Container>
         {Object.keys(resumeData).length === 0 ? (
-          <div class="text-center" style={{ height: "calc(100vh - 100px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
-            <div class="spinner-border" role="status">
-              <span class="sr-only"></span>
+          <div className="text-center" style={{ height: "calc(100vh - 100px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
+            <div className="spinner-border" role="status">
+              <span className="sr-only"></span>
             </div>
           </div>
         ) : (

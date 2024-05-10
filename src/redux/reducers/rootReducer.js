@@ -11,9 +11,10 @@ const appReducer = combineReducers({
 
 // Combine Reducers
 const rootReducer = (state, action) => {
-    if (action.type === actionTypes.LOG_OUT) {
+    if (action.type === actionTypes.CLEAR_DATA) {
     // for all keys defined in your persistConfig(s)
       //storage.removeItem('persist:root')
+      console.log("clear data")
       return appReducer(undefined, action)
     }
     return appReducer(state, action)

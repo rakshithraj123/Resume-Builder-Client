@@ -2,6 +2,7 @@
 import { AppService, HTTPHeaders } from '.'
 import * as tokenService from './tokenService'
 import aes from 'crypto-js/aes';
+import {clearData} from '../redux/'
 
 import {
   BASE_API_URL,
@@ -27,8 +28,10 @@ export const userService = {
     })
 
     let jsonResponse = response
-    if (jsonResponse.data.User.token)
-      tokenService.setSessionToken(jsonResponse.data.User.token)
+    if (jsonResponse.data.User.token){
+       tokenService.setSessionToken(jsonResponse.data.User.token)
+         
+    }
     console.log(tokenService.getSessionToken())
     return jsonResponse
   },
@@ -36,6 +39,7 @@ export const userService = {
     return tokenService.getUserFromToken()
   },
   logout: () => {
+    clearData()
     return tokenService.removeSessionToken()
   },
   register: async (data) => {

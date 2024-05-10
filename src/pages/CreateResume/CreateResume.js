@@ -12,6 +12,7 @@ import { resumeAddService } from "../../services/resumeAdd.service";
 import { toast } from "react-toastify";
 import { HOME_MENU } from "../../constants";
 import { useLocation } from "react-router-dom";
+import { setResumeId} from '../../redux/'
 
 const CreateResume = ({ handleNavigation }) => {
   const { state } = useLocation();
@@ -72,7 +73,7 @@ const CreateResume = ({ handleNavigation }) => {
 
     // Add more fields as needed
   };
-  const [formData, setFormData] = useState(state?.resumeData? state?.resumeData : {})
+  const [formData, setFormData] = useState(state?.resumeData? state?.resumeData : dummyData)
 
 
   const handleChange = (e) => {
@@ -148,7 +149,10 @@ const CreateResume = ({ handleNavigation }) => {
         if (response.status) {
           // toast("Resume creation successful");
           //
+          console.log("setResumeId "+response.data.Resume._id )
+          setResumeId(response.data.Resume._id)
           handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id)
+          
         } else if (response.status == false) {
           toast(response.message);
         }

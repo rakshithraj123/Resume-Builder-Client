@@ -2,16 +2,6 @@ import * as actionCreators from './TaskActions';
 import {store}  from './store/store';
 import * as selectors from './selectors'
 
-export const incrementCounter = () => {
-  store.dispatch(actionCreators.incrementTask());
-
-};
-
-
-export const decrementCounter = () => {
-  store.dispatch(actionCreators.decrementTask());
-
-};
 
 export const setToken = (token, isAdmin) => {
   store.dispatch(actionCreators.setTokenTask(token, isAdmin));
@@ -24,6 +14,29 @@ export const removeToken = () => {
 export const getToken = () => {
   return  selectors.getToken()
 };
+
+export const setResumeId = (resumeId) => {
+  store.dispatch(actionCreators.setResumeIdTask(resumeId));
+};
+
+export const clearResumeId = () => {
+  store.dispatch(actionCreators.clearResumeIdTask());
+};
+
+export const clearData= () => {
+  store.dispatch(actionCreators.clearDataTask());
+};
+
+export const getResumeIdState= (state) => {
+  return state.resumeBuilder.resumeId;
+};
+
+
+export const getIsAdminState = (state) => {
+  return  state.auth.isAdmin;
+}
+
+
 
 
 

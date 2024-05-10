@@ -19,7 +19,7 @@ const WorkForm = (props) => {
             {
                 props.work.work_details.map((workDetail, workDetailIndex) => {
                     return <Row style={{ padding: "10px" }} key={workDetailIndex}>
-                        <Col >
+                        <Col xs={12} sm={11} md={10} lg={10} offset={2}>
                             <Form.Group controlId={workDetailIndex} >
                                 <Form.Control
                                     placeholder="Enter Work Detail"
@@ -32,7 +32,7 @@ const WorkForm = (props) => {
                                 />
                             </Form.Group>
                         </Col>
-                        <Col xs="auto">
+                        <Col  xs="auto" className="mt-2 mt-sm-2 mt-md-2 mt-lg-2 mt-xl-2 mt-xxl-0">
                             {
                                 <Button variant="danger"
                                     onClick={(e) => props.removeWorkDetails(e,props.index, props.workIndex, props.workDetailIndex)}

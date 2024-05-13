@@ -50,7 +50,8 @@ export const userService = {
       "email":data.email,
       "password": hashString(data.password),
       "phone":data.phoneNumber,
-      "roleid":"1"
+      "roleid":"1",
+      "designation":data.designation
     })
     console.log(requestData)
     let response = null

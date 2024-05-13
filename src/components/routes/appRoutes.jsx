@@ -20,18 +20,25 @@ import "react-toastify/dist/ReactToastify.css";
 import App from '../../pages/admin/Admin'
 import { getResumeIdState,getIsAdminState,getLoggInStateState} from '../../redux/'
 import { useSelector } from 'react-redux';
+import MyPopupDialog from '../MyPopupDialog';
 
 function AppRoutes() {
   const [user, setUser] = useState(userService.getUser())
   const isAdmin = useSelector(state => getIsAdminState(state)); 
   const resumeId = useSelector(state => getResumeIdState(state)); 
+  console.log(resumeId)
   const isLoggedIn = useSelector(state => getLoggInStateState(state)); 
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   console.log("resumeId " +resumeId)
   const navigate = useNavigate()
   const location = useLocation();
 
   const handleLogout = () => {
+    setShowLogoutDialog(true)
+  }
+
+  const logout = () => {
     userService.logout()
     setUser(null)  
     handleNavigation(LOG_IN_MENU)
@@ -154,6 +161,17 @@ function AppRoutes() {
           />
         </Routes>
       </div>
+      {showLogoutDialog && <MyPopupDialog 
+      handleOkClick={()=>{
+          setShowLogoutDialog(false)
+          logout()
+      }}
+      handleCancelClick={()=>{
+        setShowLogoutDialog(false)
+    }}
+      title={"Resume Builder"}
+      message={"Confirm Your Logout, By clicking OK"}
+      />}
     </>
   )
 }

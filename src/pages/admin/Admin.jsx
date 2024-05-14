@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Table, Pagination } from 'react-bootstrap'; // Import Bootstrap Table and Pagination
 import { toast } from "react-toastify";
 import Button from 'react-bootstrap/Button';
+import { useLocation } from "react-router-dom";
+
+import { adminService } from "../../services/admin.service";
+import Results from "./Results";
 
 
 // ListView component to display search results with pagination
-const ListView = ({ data, itemsPerPage, onPageChange }) => {
+const ListView = ({ data, isLoading, itemsPerPage, onPageChange }) => {
   const [currentPage, setCurrentPage] = useState(1);
-
+  if (isLoading) {
+    return <div><h4>Loading...</h4></div>; // Render loading animation
+  }
+  
   // Calculate total number of pages
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
@@ -41,21 +48,18 @@ const ListView = ({ data, itemsPerPage, onPageChange }) => {
           <tr>
             <th>Sl No</th>
             <th>Name</th>
-            <th>Phone No</th>
             <th>Designation</th>
-            <th>Resume</th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map(result => (
-            <tr key={result.id} onClick={() => handleRowClick(result.id)} style={{ cursor: 'pointer' }}>
-              <td>{result.name}</td>
-              <td>{result.phoneno}</td>
+          {currentItems.map((result, index) => (
+            <tr key={result._id} onClick={() => handleRowClick(index+1)} style={{ cursor: 'pointer' }}>
+              <td>{index + 1}</td>
+              <td>{result.firstName+" "+result.firstName}</td>
               <td>{result.designation}</td>
-              <td>{result.resume}</td>
               <td>
                 {/* Add View button for each row */}
-                <Button variant="primary" onClick={() => handleViewClick(result.id)}>View</Button>
+                <Button variant="primary" onClick={() => handleViewClick(index+1)}>View</Button>
               </td>
             </tr>
           ))}
@@ -76,83 +80,46 @@ const ListView = ({ data, itemsPerPage, onPageChange }) => {
     </div>
   );
 };
+const itemsPerPage = 10; // Number of items to display per page
+
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const data = [
-    { id: 1, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 2, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 3, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 4, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 5, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 6, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 7, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 8, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 9, name: 'kumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 10, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 11, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 12, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 13, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 14, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 15, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 16, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 17, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 18, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 19, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 20, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 21, name: 'ram', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 22, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 23, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    { id: 24, name: 'Shivakumar', phoneno: '9738950886',designation: 'software engineer',resume: 'abcd' },
-    // Add more data objects as needed
-  ];
-
-  const itemsPerPage = 10; // Number of items to display per page
-
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
+  const { state } = useLocation();
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+  
+  useEffect(() => {
+    // event.preventDefault();
+    setIsLoading(true)
+    adminService
+    .userList()
+    .then((response) => {
+      if (!response.code==401) {
+        toast("Unable to fetch data!",response.message);      
+        return null
+      }       
+      setIsLoading(false)
+      setData(response);
+      console.log("data ", data);
+    })
+    .catch((err) => {
+      console.log(err);
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  },[]);
+  const handleSubmit = async (event) => {
   };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Perform search logic here
-    const results = data.filter(item =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.phoneno.toLowerCase().includes(searchTerm.toLowerCase())||
-      item.designation.toLowerCase().includes(searchTerm.toLowerCase())||
-      item.resume.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setSearchResults(results);
-    setCurrentPage(1); // Reset to the first page when new search results are fetched
-  };
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
-  };
-
+  }
   return (
-    <div className="App">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={handleChange}
-        />
-        <Button type="submit">Search</Button>
-      </form>
-      <div className="search-results">
-        <h2>Search Results</h2>
-        {/* Render ListView component with searchResults, itemsPerPage, and onPageChange */}
-        <ListView
-          data={searchResults}
-          itemsPerPage={itemsPerPage}
-          onPageChange={handlePageChange}
-        />
-      </div>
+    <div className="App">     
+      {<ListView data={data}
+      itemsPerPage={itemsPerPage}
+      onPageChange={handlePageChange}
+      isLoading={isLoading} />}
     </div>
   );
 }

@@ -6,10 +6,11 @@ import { useLocation } from "react-router-dom";
 
 import { adminService } from "../../services/admin.service";
 import Results from "./Results";
+import { PREVIEW_RESUME_MENU } from "../../constants";
 
 
 // ListView component to display search results with pagination
-const ListView = ({ data, isLoading, itemsPerPage, onPageChange }) => {
+const ListView = ({ data, isLoading, itemsPerPage, onPageChange,handleNavigation }) => {
   const [currentPage, setCurrentPage] = useState(1);
   if (isLoading) {
     return <div><h4>Loading...</h4></div>; // Render loading animation
@@ -32,13 +33,14 @@ const ListView = ({ data, isLoading, itemsPerPage, onPageChange }) => {
   const handleRowClick = (id) => {
     // Handle row click event here, e.g., navigate to details page
     console.log(`Clicked on row with id ${id}`);
-    toast(`Clicked on row with id ${id}`);
+   // toast(`Clicked on row with id ${id}`);
   };
 
-   const handleViewClick = (id) => {
+   const handleViewClick = (resumeId) => {
     // Handle view button click event here
-    console.log(`View button clicked for row with id ${id}`);
-    toast(`Clicked on View button with id ${id}`);
+    console.log(`View button clicked for row with id ${resumeId}`);
+   // toast(`Clicked on View button with id ${resumeId}`);
+    handleNavigation(PREVIEW_RESUME_MENU, resumeId)
   };
 
   return (
@@ -59,7 +61,7 @@ const ListView = ({ data, isLoading, itemsPerPage, onPageChange }) => {
               <td>{result.designation}</td>
               <td>
                 {/* Add View button for each row */}
-                <Button variant="primary" onClick={() => handleViewClick(index+1)}>View</Button>
+                <Button variant="primary" onClick={() => handleViewClick(result.resumeId)}>View</Button>
               </td>
             </tr>
           ))}
@@ -83,7 +85,7 @@ const ListView = ({ data, isLoading, itemsPerPage, onPageChange }) => {
 const itemsPerPage = 10; // Number of items to display per page
 
 
-function App() {
+function App({ handleNavigation }) {
   const { state } = useLocation();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -116,7 +118,7 @@ function App() {
   }
   return (
     <div className="App">     
-      {<ListView data={data}
+      {<ListView data={data} handleNavigation={handleNavigation}
       itemsPerPage={itemsPerPage}
       onPageChange={handlePageChange}
       isLoading={isLoading} />}

@@ -23,6 +23,12 @@ export const AppService = {
     }
   },
 
+  optionsPUT: () => {
+    return {
+      method: 'PUT'
+    }
+  },
+
   /**
    * Make a fetch API call
    * @param {string} url fully qualified url

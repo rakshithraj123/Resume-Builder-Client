@@ -77,7 +77,9 @@ const CreateResume = ({ handleNavigation }) => {
   };
   const resume = new Resume()
   const [formData, setFormData] = useState(state?.resumeData? state?.resumeData : resume)
-
+  const resumeId = state?.resumeId? state?.resumeId : null
+  console.log("create resume")
+  console.log(resumeId)
 
   useEffect(() => {
    if(getResumeId()!= null && (state?.resumeData) == null ){
@@ -149,11 +151,40 @@ const CreateResume = ({ handleNavigation }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    resumeId ? updateResume() : createResume()
+  };
+
+  const createResume = () => {
     setLoading(true)
     // Add logic to handle form submission, e.g., send data to backend
     let data = JSON.stringify(formData);
     resumeAddService
       .create(formData)
+      .then((response) => {
+        // console.log(response)
+        if (response.status) {
+          // toast("Resume creation successful");
+          //
+          setResumeId(response.data.Resume._id)
+          handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id)
+          
+        } else if (response.status == false) {
+          toast(response.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      }).finally(() => {
+        setLoading(false)
+      })
+  }
+
+  const updateResume = () => {
+    setLoading(true)
+    // Add logic to handle form submission, e.g., send data to backend
+    let data = JSON.stringify(formData);
+    resumeAddService
+      .update(formData,resumeId)
       .then((response) => {
         // console.log(response)
         if (response.status) {
@@ -172,7 +203,7 @@ const CreateResume = ({ handleNavigation }) => {
       }).finally(() => {
         setLoading(false)
       })
-  };
+  }
 
   // Function to handle moving to the next step
   const nextStep = () => {

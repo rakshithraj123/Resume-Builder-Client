@@ -89,7 +89,7 @@ function AppRoutes() {
                 path="/"
                 element={
                   <ProtectedRoute isLoggedIn={isLoggedIn}>
-                    <App />
+                    <App handleNavigation={handleNavigation} />
                   </ProtectedRoute>
                 }
               />

@@ -29,8 +29,11 @@ export const userService = {
 
     let jsonResponse = response
     if (jsonResponse.data.User.token){
-       tokenService.setSessionToken(jsonResponse.data.User.token)
-       setResumeId(jsonResponse.data.User?.resumeId ?? null);
+       let isAdmin = isAdminRole(jsonResponse.data.User.token)
+       tokenService.setSessionToken(jsonResponse.data.User.token,isAdmin)
+       if(!isAdmin){
+        setResumeId(jsonResponse.data.User?.resumeId ?? null);
+       }
        setLoggedIn(true)
     }
     return jsonResponse
@@ -80,4 +83,18 @@ const hashString = (plainText) => {
   const cipherText = aes.encrypt(plainText, secretKey).toString()
   console.log(cipherText);
   return cipherText
+}
+
+function isAdminRole(token) {
+  const decodedToken = token ? tokenService.getUserFromToken(token) : false;
+  
+  if (decodedToken) {
+    const roleId = decodedToken.roleid;
+    if (roleId === "1") {
+      return false;
+    } else if (roleId === "2") {
+      return true;
+    }
+  }
+  return false;
 }

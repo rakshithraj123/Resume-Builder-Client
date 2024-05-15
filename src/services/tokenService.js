@@ -3,8 +3,7 @@ import {jwtDecode} from 'jwt-decode'
 import { getToken,removeToken ,setToken} from '../redux/'
 import {clearData} from '../redux/'
 
-function setSessionToken(token) {
-  let isAdmin = isAdminRole(token)
+function setSessionToken(token,isAdmin) {
   setToken(token, isAdmin)
 }
 
@@ -24,25 +23,13 @@ function getSessionToken() {
 
   return token
 }
-function isAdminRole(token) {
-  const decodedToken = token ? jwtDecode(token).users : false;
-  
-  if (decodedToken) {
-    const roleId = decodedToken.roleid;
-    if (roleId === "1") {
-      return false;
-    } else if (roleId === "2") {
-      return true;
-    }
-  }
-  return false;
-}
 
-function getUserFromToken() {
-  const token = getSessionToken()
-  let user =  token ? jwtDecode(token).users : null
+
+function getUserFromToken(token) {
+  const _token = token ?? getSessionToken()
+  let user =  _token ? jwtDecode(_token).users : null
   console.log(user)
-  return token ? user : null
+  return _token ? user : null
 }
 
 function removeSessionToken() {

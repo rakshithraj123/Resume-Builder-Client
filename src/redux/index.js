@@ -16,6 +16,7 @@ export const getToken = () => {
 };
 
 export const setResumeId = (resumeId) => {
+  
   store.dispatch(actionCreators.setResumeIdTask(resumeId));
 };
 
@@ -30,7 +31,6 @@ export const clearData= () => {
 export const getResumeIdState= (state) => {
   return state.resumeBuilder.resumeId;
 };
-
 
 export const getIsAdminState = (state) => {
   return  state.auth.isAdmin;

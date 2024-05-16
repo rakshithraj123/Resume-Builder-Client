@@ -23,7 +23,7 @@ import { useSelector } from 'react-redux';
 import MyPopupDialog from '../MyPopupDialog';
 
 function AppRoutes() {
-  const [user, setUser] = useState(userService.getUser())
+ // const [user, setUser] = useState(userService.getUser())
   const isAdmin = useSelector(state => getIsAdminState(state)); 
   const resumeId = useSelector(state => getResumeIdState(state)); 
   console.log(resumeId)
@@ -40,7 +40,7 @@ function AppRoutes() {
 
   const logout = () => {
     userService.logout()
-    setUser(null)  
+    //setUser(null)  
     handleNavigation(LOG_IN_MENU)
   }
 
@@ -61,7 +61,7 @@ function AppRoutes() {
   }
 
   const handleAuthEvt = () => {
-    setUser(userService.getUser())
+   // setUser(userService.getUser())
   }
 
 
@@ -80,7 +80,7 @@ function AppRoutes() {
   return (
     <>
       <ToastContainer />
-      <NavBar user={user} handleLogout={handleLogout} activeMenu={activeMenu} handleMenuChange={handleMenuChange} />
+      <NavBar user={userService.getUser()} handleLogout={handleLogout} activeMenu={activeMenu} handleMenuChange={handleMenuChange} />
       <div >
         <Routes>
           {

@@ -1,127 +1,133 @@
-import React, { useState, useEffect  } from 'react';
-import { Table, Pagination } from 'react-bootstrap'; // Import Bootstrap Table and Pagination
-import { toast } from "react-toastify";
-import Button from 'react-bootstrap/Button';
-import { useLocation } from "react-router-dom";
-
+import React, { useState, useEffect } from 'react';
 import { adminService } from "../../services/admin.service";
-import Results from "./Results";
+import { toast } from "react-toastify";
+import { Pagination } from 'react-bootstrap'; // Import Bootstrap Table and Pagination
 
-
-// ListView component to display search results with pagination
-const ListView = ({ data, isLoading, itemsPerPage, onPageChange }) => {
+function EmailList() {
+  const [emails, setEmails] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  if (isLoading) {
-    return <div><h4>Loading...</h4></div>; // Render loading animation
-  }
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState(''); // Initial search term
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Initial rows per page
+
+  const fetchData = async (startPage, endPage, rowsPerPage, searchTerm) => {
+    setLoading(true);
+    setError(null);
+    const updatedFormData = {
+      startPage: startPage,
+      endPage: endPage,
+      rowCount: rowsPerPage, // Convert rowCount to string
+      searchTerm: searchTerm
+    };
+
+    adminService
+      .userList(updatedFormData)
+      .then((response) => {
+        if (response.status) {
+          setLoading(false);
+          if (response.data.User.SearchResult) {
+            setEmails(response.data.User.SearchResult);
+            setTotalPages(response.data.User.totalPages);
+          } else {
+            setEmails([]);
+            setTotalPages(1);
+            toast("No data found.");
+          }
+        } else {
+          setEmails([]);
+          setTotalPages(1);
+          toast("Unable to fetch data!", response.message);
+        }
+      })
+      .catch((err) => {
+        setEmails([]);
+        setTotalPages(1);
+        console.log("Error ", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchData(currentPage, currentPage , rowsPerPage, searchTerm);
+  }, [currentPage, rowsPerPage, searchTerm]);
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
   
-  // Calculate total number of pages
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-
-  // Slice data array based on current page and items per page
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = data.slice(startIndex, endIndex);
-
-  // Function to handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    onPageChange(page);
+  };
+  
+  const handleFirstPage = () => {
+    setCurrentPage(1);
+  };
+  
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  
+  const handleLastPage = () => {
+    setCurrentPage(totalPages);
   };
 
-  const handleRowClick = (id) => {
-    // Handle row click event here, e.g., navigate to details page
-    console.log(`Clicked on row with id ${id}`);
-    toast(`Clicked on row with id ${id}`);
-  };
-
-   const handleViewClick = (id) => {
-    // Handle view button click event here
-    console.log(`View button clicked for row with id ${id}`);
-    toast(`Clicked on View button with id ${id}`);
+  const handleRowsChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value)); // Convert dropdown value to integer
+    setCurrentPage(1); // Reset to the first page when rows per page changes
   };
 
   return (
-    <div className="list-view">
-      <Table striped bordered hover>
+    <div>
+      <input type="text" value={searchTerm} onChange={handleSearch} placeholder="Search" />
+      <select value={rowsPerPage} onChange={handleRowsChange}>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+      </select>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      <table>
         <thead>
           <tr>
-            <th>Sl No</th>
             <th>Name</th>
-            <th>Designation</th>
+            <th>Email ID</th>
+            <th>Phone</th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((result, index) => (
-            <tr key={result._id} onClick={() => handleRowClick(index+1)} style={{ cursor: 'pointer' }}>
-              <td>{index + 1}</td>
-              <td>{result.firstName+" "+result.firstName}</td>
-              <td>{result.designation}</td>
-              <td>
-                {/* Add View button for each row */}
-                <Button variant="primary" onClick={() => handleViewClick(index+1)}>View</Button>
-              </td>
+          {emails.map((email) => (
+            <tr key={email._id}>
+              <td>{email.firstName} {email.lastName}</td>
+              <td>{email.email}</td>
+              <td>{email.phoneNumber}</td>
+              <td>{/* Phone number is not provided in the data */}</td>
             </tr>
           ))}
         </tbody>
-      </Table>
-      <Pagination>
-        {/* Render pagination buttons */}
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(page => (
-          <Pagination.Item
-            key={page}
-            active={currentPage === page}
-            onClick={() => handlePageChange(page)}
-          >
-            {page}
-          </Pagination.Item>
-        ))}
-      </Pagination>
-    </div>
-  );
-};
-const itemsPerPage = 10; // Number of items to display per page
-
-
-function App() {
-  const { state } = useLocation();
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-  
-  useEffect(() => {
-    // event.preventDefault();
-    setIsLoading(true)
-    adminService
-    .userList()
-    .then((response) => {
-      if (!response.code==401) {
-        toast("Unable to fetch data!",response.message);      
-        return null
-      }       
-      setIsLoading(false)
-      setData(response);
-      console.log("data ", data);
-    })
-    .catch((err) => {
-      console.log(err);
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  },[]);
-  const handleSubmit = async (event) => {
-  };
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  }
-  return (
-    <div className="App">     
-      {<ListView data={data}
-      itemsPerPage={itemsPerPage}
-      onPageChange={handlePageChange}
-      isLoading={isLoading} />}
+      </table>
+      <div>
+        <span>{`${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, totalPages * rowsPerPage)} of ${totalPages * rowsPerPage}`}</span>  {/* Update page range based on current page */}
+        <button onClick={handleFirstPage}>&lt;&lt;</button>
+        <button onClick={handlePreviousPage}>&lt;</button>
+        <button onClick={handleNextPage}>&gt;</button>
+        <button onClick={handleLastPage}>&gt;&gt;</button>
+      </div>
     </div>
   );
 }
 
-export default App;
+export default EmailList;

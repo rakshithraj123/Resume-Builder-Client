@@ -5,6 +5,9 @@
   background-color: rgb(210, 210, 225);
   
 }
+.minVh{
+  min-height: calc(100vh - 120px);
+}
 
 /* .step1::after {
   content: "-------";

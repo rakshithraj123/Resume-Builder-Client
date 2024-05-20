@@ -1,16 +1,22 @@
-// npm modules
-import { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { userService } from "../../services";
-import { NETWORK_ERROR, REGISTRING } from "../../constants";
+import { NETWORK_ERROR, REGISTRING, LOG_IN_MENU, LOG_IN_PATH } from "../../constants";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import { LOG_IN_MENU } from "../../constants";
-// css
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Logo from "../../img/logo.svg";
+import SignupBg from "../../img/signup.jpg";
+import Image from "react-bootstrap/Image";
+
 import styles from "./Signup.module.css";
 
 const Signup = ({ handleAuthEvt, handleNavigation }) => {
-  const navigate = useNavigate();
   const imgInputRef = useRef(null);
 
   const [message, setMessage] = useState("");
@@ -27,7 +33,7 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const designationOptions = [
     "Analyst",
-    "Juinor Engineer",
+    "Junior Engineer",
     "Engineer",
     "Senior Engineer",
     "Manager",
@@ -45,7 +51,6 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
     const validFormats = ["gif", "jpeg", "jpg", "png", "svg", "webp"];
     const photoFormat = file.name.split(".").at(-1);
 
-    // cloudinary supports files up to 10.4MB each as of May 2023
     if (file.size >= 10485760) {
       errMsg = "Image must be smaller than 10.4MB";
       isFileInvalid = true;
@@ -68,14 +73,6 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    // setIsSubmitted(true)
-    //  setTimeout(() =>{
-    //   toast("Hello Geeks 5");
-    //    setIsSubmitted("false")
-
-    //    handleAuthEvt()
-    //    handleNavigation(LOG_IN_MENU)
-    //  },2000)
     const validationMessage = validateFormData();
     if (validationMessage !== true) {
       setMessage(validationMessage);
@@ -97,20 +94,6 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
         setMessage(err.message);
         setIsSubmitted(false);
       });
-
-    // try {
-    //   // if (!import.meta.env.VITE_BACK_END_SERVER_URL) {
-    //   //   throw new Error('No VITE_BACK_END_SERVER_URL in front-end .env')
-    //   // }
-    //   setIsSubmitted(true)
-    //   await authService.signup(formData, photoData.photo)
-    //   handleAuthEvt()
-    //   navigate('/')
-    // } catch (err) {
-    //   console.log(err)
-    //   setMessage(err.message)
-    //   setIsSubmitted(false)
-    // }
   };
 
   const validateFormData = () => {
@@ -137,7 +120,10 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
       return "Invalid phone number";
     }
 
-    if (designation === "" || designation === "Select Designation") {
+    if (
+      formData.designation === "" ||
+      formData.designation === "Select Designation"
+    ) {
       return "Select designation from drop down";
     }
 
@@ -174,101 +160,141 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
     );
 
   return (
-    <main className={styles.container}>
-      <h1>Sign Up</h1>
-      <br />
-      <form autoComplete="off" onSubmit={handleSubmit} className={styles.form}>
-        <label className={styles.label}>
-          First Name
-          <input
-            type="text"
-            value={firstName}
-            name="firstName"
-            onChange={handleChange}
-          />
-        </label>
-        <label className={styles.label}>
-          Last Name
-          <input
-            type="text"
-            value={lastName}
-            name="lastName"
-            onChange={handleChange}
-          />
-        </label>
-        <label className={styles.label}>
-          Email
-          <input
-            type="text"
-            value={email}
-            name="email"
-            onChange={handleChange}
-          />
-        </label>
-        <label className={styles.label}>
-          Password
-          <input
-            type="password"
-            value={password}
-            name="password"
-            onChange={handleChange}
-          />
-        </label>
-        <label className={styles.label}>
-          Confirm Password
-          <input
-            type="password"
-            value={passwordConf}
-            name="passwordConf"
-            onChange={handleChange}
-          />
-        </label>
-        <label className={styles.label}>
-          Phone Number
-          <input
-            type="phone"
-            value={phoneNumber}
-            name="phoneNumber"
-            onChange={handleChange}
-            maxLength={10}
-          />
-        </label>
-        <label className={styles.dropDownLabel}>
-          Designation         
-          <select
-            value={designation}
-            name="designation"
-            onChange={handleChange}
-            className={styles.dropDownSelect}
-          >
-            <option value="">Select Designation</option>
-            {designationOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </label>
-        {/* <label className={styles.label}>
-          Upload Photo
-          <input 
-            type="file" 
-            name="photo" 
-            onChange={handleChangePhoto}
-            ref={imgInputRef}
-          />
-        </label> */}
-        <div>
-          <button
-            className={styles.button}
-            disabled={isFormInvalid() || isSubmitted}
-          >
-            {!isSubmitted ? "Sign Up" : "🚀 Sending..."}
-          </button>
-        </div>
-      </form>
-      <p className={styles.message}>{message}</p>
-    </main>
+    <Container>
+      <Row className="vh-100 align-items-center justify-content-md-center">
+        <Col xs lg="8">
+          <Row className="bg-white rounded-4 shadow-lg">
+            <Col xs="12" lg="6" className="p-3 d-none d-sm-block">
+              <Image
+                src={SignupBg}
+                className="rounded-3 object-fit-cover h-100"
+                fluid
+              />
+            </Col>
+            <Col xs="12" md="6" className="p-md-5 p-3">
+              <div>
+                <h4 className="text-uppercase fw-bold mb-3">
+                  <Image src={Logo} width={40} /> Resume Builder
+                </h4>
+                <h2 className="fw-bolder fs-1">Get Started</h2>
+                <p className="text-muted mb-3">
+                  Already have an account? <Link to={LOG_IN_PATH}>Sign in</Link>
+                </p>
+                <Form autoComplete="off" onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="First Name"
+                      className="mb-3"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="John"
+                        name="firstName"
+                        value={firstName}
+                        onChange={handleChange}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Last Name"
+                      className="mb-3"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder="Doe"
+                        name="lastName"
+                        value={lastName}
+                        onChange={handleChange}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Email address"
+                      className="mb-3"
+                    >
+                      <Form.Control
+                        type="email"
+                        placeholder="name@example.com"
+                        name="email"
+                        value={email}
+                        onChange={handleChange}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel controlId="" label="Password">
+                      <Form.Control
+                        type="password"
+                        placeholder="Password"
+                        name="password"
+                        value={password}
+                        onChange={handleChange}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel controlId="" label="Confirm Password">
+                      <Form.Control
+                        type="password"
+                        placeholder="Confirm Password"
+                        name="passwordConf"
+                        value={passwordConf}
+                        onChange={handleChange}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel controlId="" label="Phone Number">
+                      <Form.Control
+                        type="tel"
+                        placeholder=""
+                        name="phoneNumber"
+                        value={phoneNumber}
+                        onChange={handleChange}
+                        maxLength={10}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel controlId="" label="Designation">
+                      <Form.Select
+                        aria-label=""
+                        name="designation"
+                        value={designation}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select Designation</option>
+                        {designationOptions.map((option, index) => (
+                          <option key={index} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </FloatingLabel>
+                  </Form.Group>
+                  <div className="d-grid mb-3">
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      className="p-3"
+                      disabled={isFormInvalid() || isSubmitted}
+                    >
+                      {!isSubmitted ? "Sign up" : "🚀 Sending..."}
+                    </Button>
+                  </div>
+                </Form>
+                <p className={styles.message}>{message}</p>
+              </div>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

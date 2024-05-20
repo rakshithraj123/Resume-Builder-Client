@@ -33,6 +33,7 @@ function AppRoutes() {
   console.log("resumeId " +resumeId)
   const navigate = useNavigate()
   const location = useLocation();
+  const isAuthPage = location.pathname === LOG_IN_PATH|| location.pathname === SIGN_UP_PATH;
 
   const handleLogout = () => {
     setShowLogoutDialog(true)
@@ -80,7 +81,7 @@ function AppRoutes() {
   return (
     <>
       <ToastContainer />
-      <NavBar user={userService.getUser()} handleLogout={handleLogout} activeMenu={activeMenu} handleMenuChange={handleMenuChange} />
+      {!isAuthPage && <NavBar user={userService.getUser()} handleLogout={handleLogout} activeMenu={activeMenu} handleMenuChange={handleMenuChange} />}
       <div >
         <Routes>
           {

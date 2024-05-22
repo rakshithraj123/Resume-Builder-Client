@@ -1,5 +1,5 @@
 import { AppService, HTTPHeaders } from ".";
-import { BASE_API_URL, USERS } from "../constants";
+import { BASE_API_URL, SEARCHLIST } from "../constants";
 import * as tokenService from "./tokenService";
 
 const options = AppService.options()
@@ -25,7 +25,7 @@ export const adminService = {
         'Authorization': `Bearer ${token}`,
       };
     let response = null
-    response = await AppService.makeRequest(BASE_API_URL + USERS, {
+    response = await AppService.makeRequest(BASE_API_URL + SEARCHLIST, {
       ...options,
       headers: httpRequestHeaders,
       body: requestData,

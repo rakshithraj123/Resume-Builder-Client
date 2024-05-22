@@ -1,128 +1,123 @@
-import React, { useState, useEffect  } from 'react';
-import { Table, Pagination } from 'react-bootstrap'; // Import Bootstrap Table and Pagination
-import { toast } from "react-toastify";
-import Button from 'react-bootstrap/Button';
-import { useLocation } from "react-router-dom";
-
+import React, { useState, useEffect } from "react";
+import DataTable from 'react-data-table-component';
+import Header from "../../components/Header/Header";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { adminService } from "../../services/admin.service";
-import { PREVIEW_RESUME_MENU } from "../../constants";
+import { toast } from "react-toastify";
 
 
-// ListView component to display search results with pagination
-const ListView = ({ data, isLoading, itemsPerPage, onPageChange,handleNavigation }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  if (isLoading) {
-    return <div><h4>Loading...</h4></div>; // Render loading animation
-  }
-  
-  // Calculate total number of pages
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+const columns = [
+  {
+    name: 'Name',
+    selector: row => row.firstName+" "+row.lastName,
+    sortable: true,
+  },
+  {
+    name: 'Email ID',
+    selector: row => row.email,
+    sortable: true,
+  },
+  {
+    name: 'Designation',
+    selector: row => row.designation,
+    sortable: true,
+  },
+];
 
-  // Slice data array based on current page and items per page
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = data.slice(startIndex, endIndex);
+function Dashboard() {
+  const [records, setRecords] = useState([]);
+  const [filteredRecords, setFilteredRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Function to handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    onPageChange(page);
-  };
-
-  const handleRowClick = (id) => {
-    // Handle row click event here, e.g., navigate to details page
-    console.log(`Clicked on row with id ${id}`);
-   // toast(`Clicked on row with id ${id}`);
-  };
-
-   const handleViewClick = (resumeId) => {
-    // Handle view button click event here
-    console.log(`View button clicked for row with id ${resumeId}`);
-   // toast(`Clicked on View button with id ${resumeId}`);
-    handleNavigation(PREVIEW_RESUME_MENU, resumeId)
-  };
-
-  return (
-    <div className="list-view">
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Sl No</th>
-            <th>Name</th>
-            <th>Designation</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((result, index) => (
-            <tr key={result._id} onClick={() => handleRowClick(index+1)} style={{ cursor: 'pointer' }}>
-              <td>{index + 1}</td>
-              <td>{result.firstName+" "+result.firstName}</td>
-              <td>{result.designation}</td>
-              <td>
-                {/* Add View button for each row */}
-                <Button variant="primary" onClick={() => handleViewClick(result.resumeId)}>View</Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Pagination>
-        {/* Render pagination buttons */}
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(page => (
-          <Pagination.Item
-            key={page}
-            active={currentPage === page}
-            onClick={() => handlePageChange(page)}
-          >
-            {page}
-          </Pagination.Item>
-        ))}
-      </Pagination>
-    </div>
-  );
-};
-const itemsPerPage = 10; // Number of items to display per page
-
-
-function App({ handleNavigation }) {
-  const { state } = useLocation();
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-  
   useEffect(() => {
-    // event.preventDefault();
-    setIsLoading(true)
-    adminService
-    .userList()
-    .then((response) => {
-      if (!response.code==401) {
-        toast("Unable to fetch data!",response.message);      
-        return null
-      }       
-      setIsLoading(false)
-      setData(response);
-      console.log("data ", data);
-    })
-    .catch((err) => {
-      console.log(err);
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  },[]);
-  const handleSubmit = async (event) => {
-  };
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+    const fetchData = async () => {
+      const updatedFormData = {
+        startPage: 1,
+        endPage: 99999,
+        rowCount: 10, // Convert rowCount to string
+        searchTerm: ''
+      };
+
+      adminService
+      .userList(updatedFormData)
+      .then((response) => {
+          setLoading(false);
+          if (response.status) {
+          setRecords(response.data.User.SearchResult);
+          setFilteredRecords(response.data.User.SearchResult);
+          setLoading(false);
+          } else {
+            setRecords([]);
+            toast("No data found.");
+          }
+        
+      })
+      .catch((err) => {
+        setRecords([]);        
+        console.log("Error ", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    };
+
+    fetchData();
+  }, []);
+
+  function handleFilter(event) {
+    const value = event.target.value.toLowerCase();
+    const filteredData = records.filter(row => 
+      (row.firstName&&row.firstName.toLowerCase().includes(value))||
+      (row.lastName&&row.lastName.toLowerCase().includes(value))||
+      (row.designation&&row.designation.toLowerCase().includes(value))
+    );
+    setFilteredRecords(filteredData);
   }
+
   return (
-    <div className="App">     
-      {<ListView data={data} handleNavigation={handleNavigation}
-      itemsPerPage={itemsPerPage}
-      onPageChange={handlePageChange}
-      isLoading={isLoading} />}
-    </div>
+    <>
+      <Header />
+      <div className="p-5 bg-primary">
+        <Container>
+          <Row>
+            <Col>
+              <div className="py-5"></div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow">
+        <Row>
+          <Col>
+            <Row className="justify-content-end align-items-center mb-2">
+              <Col>
+                <h3 className="mb-md-0 mb-3"><i className="bi bi-person"></i> Users</h3>
+              </Col>
+              <Col lg={4}>
+                <FloatingLabel controlId="search" label="Search">
+                  <Form.Control type="text" onChange={handleFilter} />
+                </FloatingLabel>
+              </Col>
+            </Row>
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <DataTable
+                columns={columns}
+                data={filteredRecords}
+                pagination
+              />
+            )}
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 
-export default App;
+export default Dashboard;

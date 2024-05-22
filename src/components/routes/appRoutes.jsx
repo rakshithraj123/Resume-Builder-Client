@@ -21,11 +21,13 @@ import App from '../../pages/admin/Admin'
 import { getResumeIdState,getIsAdminState,getLoggInStateState} from '../../redux/'
 import { useSelector } from 'react-redux';
 import MyPopupDialog from '../MyPopupDialog';
+import Footer from '../Footer/Footer'
 
 function AppRoutes() {
-  const [user, setUser] = useState(userService.getUser())
+ // const [user, setUser] = useState(userService.getUser())
   const isAdmin = useSelector(state => getIsAdminState(state)); 
   const resumeId = useSelector(state => getResumeIdState(state)); 
+  var showNav = true;
   console.log(resumeId)
   const isLoggedIn = useSelector(state => getLoggInStateState(state)); 
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -40,7 +42,7 @@ function AppRoutes() {
 
   const logout = () => {
     userService.logout()
-    setUser(null)  
+    //setUser(null)  
     handleNavigation(LOG_IN_MENU)
   }
 
@@ -50,8 +52,21 @@ function AppRoutes() {
       case LOG_IN_MENU: return navigate("/auth/login")
       case SIGN_UP_MENU: return navigate("/auth/signup")
       case HOME_MENU: return navigate("/")
-      case CREATE_RESUME_MENU: return navigate("/createResume", { state: data, replace: true })
-      case PREVIEW_RESUME_MENU: return navigate("/previewResume", { state: { resumeId: data }, replace: true })
+      case CREATE_RESUME_MENU: {
+        if(isLoggedIn){
+          return navigate("/createResume", { state: data, replace: true })
+        }else{
+          return handleNavigation(LOG_IN_MENU)
+        }
+      }
+      case PREVIEW_RESUME_MENU: 
+      {
+        if(isLoggedIn){
+          return navigate("/previewResume", { state: { resumeId: data }, replace: true })
+        }else{
+          return handleNavigation(LOG_IN_MENU)
+        }
+      }   
       default: return navigate("/")
     }
   }
@@ -61,14 +76,18 @@ function AppRoutes() {
   }
 
   const handleAuthEvt = () => {
-    setUser(userService.getUser())
+   // setUser(userService.getUser())
   }
 
 
   const getIntialMenu = () => {
     switch (location.pathname) {
-      case LOG_IN_PATH: return LOG_IN_MENU
-      case SIGN_UP_PATH: return SIGN_UP_MENU
+      case LOG_IN_PATH:  {
+        showNav = false
+        return LOG_IN_MENU}
+      case SIGN_UP_PATH: {
+        showNav = false
+        return SIGN_UP_MENU}
       case HOME_PATH: return isLoggedIn ? HOME_MENU : LOG_IN_MENU
       case CREATE_RESUME_PATH: return isLoggedIn ? HOME_MENU : LOG_IN_MENU
       case PREVIEW_RESUME_PATH: return isLoggedIn ? HOME_MENU : LOG_IN_MENU
@@ -80,16 +99,18 @@ function AppRoutes() {
   return (
     <>
       <ToastContainer />
-      <NavBar user={user} handleLogout={handleLogout} activeMenu={activeMenu} handleMenuChange={handleMenuChange} />
+      {showNav && <NavBar user={userService.getUser()} handleLogout={handleLogout} activeMenu={activeMenu} handleMenuChange={handleMenuChange} />}
       <div >
         <Routes>
-          {
+         {
+          isLoggedIn?
+          (
             isAdmin ?
               <Route
                 path="/"
                 element={
                   <ProtectedRoute isLoggedIn={isLoggedIn}>
-                    <App />
+                    <App handleNavigation={handleNavigation} />
                   </ProtectedRoute>
                 }
               />
@@ -103,26 +124,23 @@ function AppRoutes() {
                     </ProtectedRoute>
                   }
                 /> :
-                <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute isLoggedIn={isLoggedIn}>
-                      <CreateResume handleNavigation={handleNavigation} />
-                    </ProtectedRoute>
-                  }
-                />)
-
-          }
-
-
-          {/* <Route
+               <Route
             path="/"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <Landing isLoggedIn={isLoggedIn} handleNavigation={handleNavigation} />
-              </ProtectedRoute>
+              <Landing isLoggedIn={isLoggedIn} handleNavigation={handleNavigation} />
             }
-          /> */}
+          /> )
+          )
+          :
+            <Route
+            path="/"
+            element={
+              <PublicRoute isLoggedIn={isLoggedIn}>
+                  <Landing isLoggedIn={isLoggedIn} handleNavigation={handleNavigation} />
+              </PublicRoute>
+            }
+          />       
+         }
 
           <Route
             path="/createResume"
@@ -161,6 +179,7 @@ function AppRoutes() {
           />
         </Routes>
       </div>
+      {showNav && <Footer user={userService.getUser()}/>}
       {showLogoutDialog && <MyPopupDialog 
       handleOkClick={()=>{
           setShowLogoutDialog(false)

@@ -1,0 +1,204 @@
+/* import only the Bootstrap files needed for customizations */
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+/* make the customizations */
+$white: #fff !default;
+$gray-100: #eff2f9 !default;
+$gray-200: #d9deeb !default;
+$gray-300: #bec4d5 !default;
+$gray-400: #9fa6bb !default;
+$gray-500: #828ba2 !default;
+$gray-600: #656e83 !default;
+$gray-700: #495163 !default;
+$gray-800: #303848 !default;
+$gray-900: #1e2532 !default;
+$black: #0f141e !default;
+
+$font-family-sans-serif: "Inter", sans-serif;
+$font-weight-bolder: 900 !default;
+$navbar-light-color: $black;
+$navbar-dark-color: $white;
+$navbar-nav-link-padding-x: 1rem;
+
+$input-focus-box-shadow: none;
+$input-focus-border-color: #4d43e4;
+
+$theme-colors: (
+  "primary": #4d43e4,
+  "secondary": $gray-600,
+  "success": $green,
+  "info": #00aef3,
+  "warning": #f9773b,
+  "danger": $red,
+  "light": $gray-100,
+  "dark": $gray-900,
+
+);
+
+$link-color: #4d43e4;
+$enable-negative-margins: true;
+
+/* import bootstrap to set changes */
+@import '~bootstrap/scss/bootstrap';
+
+
+::selection {
+  background-color: #94D034;
+  color: #fff;
+}
+
+body {
+  background-color: #dadcdb;
+}
+
+.min-vh-50 {
+  min-height: 50vh !important;
+}
+
+.min-vh-75 {
+  min-height: 75vh !important;
+}
+
+.mw-50 {
+  max-width: 50%;
+}
+
+.text-gradiant {
+  background: linear-gradient(320deg, #ff5f6d, #ffc371);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-floating>label {
+  font-size: 14px;
+}
+
+.tab-content {
+  width: 100%;
+}
+
+.rdw-editor-main {
+  min-height: 150px;
+}
+
+.form-control .form-control {
+  border: none;
+  padding: 0;
+  box-shadow: none !important;
+}
+
+.rbt-token {
+  background-color: #4d43e42b;
+  color: #4d43e4;
+
+  &-active {
+    background-color: #4d43e4;
+    color: #ffffff;
+
+    .btn-close:hover {
+      color: #ffffff;
+    }
+  }
+}
+
+.card-wizard {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  border: none;
+
+  .card-header {
+    width: 20%;
+    border: none;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .card-header {
+      display: none;
+    }
+  }
+
+  .card-body {
+    width: 80%;
+  }
+
+  .card-footer {
+    width: 100%;
+    border-radius: 0;
+    border: none;
+
+    .btn {
+      padding: 10px 40px;
+
+      &.btn-next,
+      &.btn-finish {
+        background: #4d43e4;
+        border: none;
+        padding: 10px 40px;
+      }
+
+      &.btn-previous {
+        border-color: #4d43e4;
+        background: none;
+        color: #4d43e4;
+        padding: 10px 40px;
+      }
+    }
+
+  }
+}
+
+.progress-with-circle {
+  background: #e9ecef;
+
+  .progress-bar {
+    background: #4d43e4;
+    height: 1px;
+  }
+}
+
+.wizard-navigation {
+  .nav.nav-pills {
+    margin: 20px 0;
+    border-left: dashed 1px #212529;
+
+    .nav-item {
+      width: 100% !important;
+      text-align: left;
+
+      .nav-link {
+        cursor: pointer;
+        color: #212529;
+        position: relative;
+
+        &::after {
+          position: absolute;
+          content: "";
+          width: 10px;
+          height: 10px;
+          background: #adb5bd;
+          left: -6px;
+          border-radius: 50%;
+          top: 15px;
+        }
+
+        &.active {
+          background: none;
+          color: #4d43e4;
+          font-weight: bold;
+
+          &::after {
+            background: #4d43e4;
+          }
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+    }
+  }
+}

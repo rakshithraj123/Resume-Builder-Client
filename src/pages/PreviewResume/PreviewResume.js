@@ -59,7 +59,7 @@ const PreviewResume = ({ handleNavigation,savedResumeId }) => {
 
   const goToResumeEdit = (e) => {
     e.preventDefault();
-    handleNavigation(CREATE_RESUME_MENU,{resumeData :resumeData})
+    handleNavigation(CREATE_RESUME_MENU,{resumeData :resumeData,resumeId :resumeId})
   };
 
   
@@ -96,7 +96,7 @@ const PreviewResume = ({ handleNavigation,savedResumeId }) => {
               <Col>
                 <h5>Key Skills</h5>
                 <ul>
-                  {resumeData["keySkills"].map((item, index) => (
+                  {(resumeData["keySkills"] ?? []).map((item, index) => (
                     <li key={index}>{item}</li>
                   ))}
                 </ul>
@@ -106,7 +106,7 @@ const PreviewResume = ({ handleNavigation,savedResumeId }) => {
               <Col>
                 <h5>Professional Experience</h5>
 
-                {resumeData["professionalExperience"].map(
+                {(resumeData["professionalExperience"] ?? []).map(
                   (experience, experienceIndex) => (
                     <div key={experienceIndex}>
                       <h6>{experience.company_name}</h6>
@@ -132,7 +132,7 @@ const PreviewResume = ({ handleNavigation,savedResumeId }) => {
               <Col>
                 <h5>Education</h5>
                 <ul>
-                  {resumeData["education"].map((item, index) => (
+                  {(resumeData["education"] ?? []).map((item, index) => (
                     <li key={index}>{item}</li>
                   ))}
                 </ul>
@@ -142,7 +142,7 @@ const PreviewResume = ({ handleNavigation,savedResumeId }) => {
               <Col>
                 <h5>Additional Qualifications</h5>
                 <ul>
-                  {resumeData["additionalQualifications"].map((item, index) => (
+                  {(resumeData["additionalQualifications"] ?? []).map((item, index) => (
                     <li key={index}>{item}</li>
                   ))}
                 </ul>

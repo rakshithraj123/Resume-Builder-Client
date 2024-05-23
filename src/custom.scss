@@ -65,6 +65,10 @@ body {
   max-width: 50%;
 }
 
+.navbar .active.nav-link {
+  font-weight: bold;
+}
+
 .text-gradiant {
   background: linear-gradient(320deg, #ff5f6d, #ffc371);
   background-clip: text;

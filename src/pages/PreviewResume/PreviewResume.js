@@ -17,6 +17,8 @@ import {
 
 const PreviewResume = ({ handleNavigation, savedResumeId }) => {
   const { state } = useLocation();
+  const [loading, setLoading] = useState(false);
+
   let resumeId = state?.resumeId;
   if (resumeId == null) {
     resumeId = savedResumeId
@@ -26,7 +28,9 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         const response = await resumeAddService.fetch(resumeId);
+        
         console.log(response);
 
         if (response.status) {
@@ -37,6 +41,8 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
       } catch (error) {
         console.error("Error:", error);
         // Handle error
+      } finally{
+        setLoading(false)
       }
     };
     if (resumeId == null) {
@@ -62,6 +68,14 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
     handleNavigation(CREATE_RESUME_MENU, { resumeData: resumeData, resumeId: resumeId })
   };
 
+  if (loading)
+    return (
+      <div class="text-center" style={{ height: "calc(100vh - 100px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
+        <div class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+    );
 
   return (
     <>

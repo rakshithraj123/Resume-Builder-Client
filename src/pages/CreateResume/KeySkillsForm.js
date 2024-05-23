@@ -1,58 +1,70 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap'
 import styles from "./CreateResume.module.css";
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
-const KeySkillsForm = (props) => {
+const KeySkillsForm = forwardRef((props, ref) => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Form submitted');
+    // Add your form submission logic here
+  };
   return (
-    <Form onSubmit={props.nextStep}>
-      <Form.Label style={{ fontSize: '25px' }}><strong>Key Skills</strong></Form.Label>
-      <br /><br />
+    <>
 
-      {
-        props.keySkills.map((skill, index) => {
-          return <div className="nestedContainer" key={index}>
-            <Row>
-              <Col >
-                <Form.Group controlId={index} >
-                  <Form.Control
-                    placeholder="Enter Skill"
-                    type="text"
-                    name="skill"
-                    value={skill}
-                    onChange={(e) => props.handleKeySkillChange(e, index)}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col xs="auto">
-                {
-                  <Button variant="danger"  className={styles.removeButton}  
-                    onClick={(e) => props.removeKeySkills(e, index)}
-                    disabled={(props.keySkills.length == 1)}>
-                    Remove
-                  </Button>
+      <div className="p-md-5 p-3">
+        <h3 className="mb-0">Let’s pick your top skills</h3>
+        <p className="small text-muted mb-5">Choose from our pre-written examples below or write your own.</p>
+        <Form onSubmit={handleSubmit} ref={ref} >
+      
 
-                }
-                {
-                  <Button  variant="success"  className={styles.addButton} 
-                    onClick={(e) => props.addKeySkills()}
-                    disabled={!(index == props.keySkills.length - 1 && props.keySkills.length < 10)} >
-                    Add
-                  </Button>
-                }
-              </Col>
+          {
+            props.keySkills.map((skill, index) => {
+              return <div className="nestedContainer" key={index}>
+                <Row>
+                  <Col >
+                    <Form.Group controlId={index}>
+                    <FloatingLabel controlId="" label="Skill" className="mb-3">
+                    <Form.Control
+                        placeholder="Enter Skill"
+                        type="text"
+                        name="skill"
+                        value={skill}
+                        onChange={(e) => props.handleKeySkillChange(e, index)}
+                        required
+                      />
+                        </FloatingLabel>
+                      
+                    </Form.Group>
+                  </Col>
+                  <Col xs="auto">
+                    {/* {
+                      <Button variant="danger" className={styles.removeButton}
+                        onClick={(e) => props.removeKeySkills(e, index)}
+                        disabled={(props.keySkills.length == 1)}>
+                        Remove
+                      </Button> */
+                   <Button variant="outline-danger" size="lg"
+                   onClick={(e) => props.removeKeySkills(e, index)}
+                        disabled={(props.keySkills.length == 1)}
+                   ><i class="bi bi-trash"></i></Button>
+                    }
+                    
+                  </Col>
 
 
 
-            </Row>
-            <br />
+                </Row>
+                <br />
 
-          </div>
-        })
+              </div>
+            })
 
-      }
+          }
 
-      {/* <Row className="justify-content-between">
+          {/* <Row className="justify-content-between">
         <Col xs="auto">
           <Button variant="primary" onClick={props.prevStep} >
             Previous
@@ -64,8 +76,22 @@ const KeySkillsForm = (props) => {
           </Button>
         </Col>
       </Row> */}
-    </Form>
+        </Form>
+
+        <div className="py-4">
+                    <Button variant="link"
+                     disabled={!(props.keySkills.length < 10)}
+                    onClick={(e) => props.addKeySkills()}>
+                      + Add more Skill</Button>
+        </div>
+
+
+
+      </div>
+    </>
+
+
   )
-}
+});
 
 export default KeySkillsForm

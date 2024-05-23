@@ -76,7 +76,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
               </div>
             </Col>
             <Col md="auto">
-              <Button variant="outline-light">Print / Download</Button>
+              <Button variant="outline-light" onClick={(e)=>{printResume(e)}}>Print / Download</Button>
             </Col>
           </Row>
         </Container>
@@ -89,7 +89,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
 
 
             <>
-            <div className="bg-white shadow-lg p-3">
+            <div className="bg-white shadow-lg p-3" id="content-to-print">
               <Row className=" justify-content-between mb-5">
                 <Col>
                   <h3>{resumeData.firstName} {resumeData.lastName}</h3></Col>
@@ -158,7 +158,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
 
 
             <div className="text-center pt-4">
-              <Button variant="primary">Print / Download</Button>
+              <Button variant="primary" onClick={(e) => goToResumeEdit(e)}>EDIT</Button>
             </div>
           </Col>
         </Row>

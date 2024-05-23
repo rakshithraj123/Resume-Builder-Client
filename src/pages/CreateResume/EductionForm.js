@@ -1,60 +1,76 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap'
 import styles from "./CreateResume.module.css";
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
-const EductionForm = (props) => {
+const EductionForm = forwardRef((props, ref)  => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Form submitted');
+    // Add your form submission logic here
+  };
   return (
-    <Form onSubmit={props.nextStep}>
- <Form.Label style={{ fontSize: '25px' }}><strong>Education</strong></Form.Label>
-      <br /><br />
-  
-      {
-        props.education.map((education, index) => {
-          return <div className="nestedContainer" key={index}>
-            <Row>
-              <Col >
-                <Form.Group controlId={index} >
-                  <Form.Control
-                    type="text"
-                    name="education"
-                    value={education}
-                    placeholder="Enter Education"
-                    onChange={(e) => props.handleEducationChange(e, index)}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col xs="auto">
+    <>
 
-                {
-                  <Button variant="danger" className={styles.removeButton} 
-                    onClick={(e) => props.removeEducation(e, index)}
-                    disabled={(props.education.length == 1)}>
-                    Remove
-                  </Button>
+      <div className="p-md-5 p-3">
+        <h3 className="mb-0">Tell us about your education</h3>
+        <p className="small text-muted mb-5">Tell us about any colleges, vocational programs, or training courses you took. </p>
 
-                }
-                {
-                  <Button variant="success" className={styles.addButton} 
-                    onClick={(e) =>  props.addEducation() }
-                    disabled={!(index == props.education.length - 1 && props.education.length < 10)} >
-                    Add
-                  </Button>
-                }
+        <Form ref={ref} onSubmit={handleSubmit}>
 
 
-              </Col>
+          {
+            props.education.map((education, index) => {
+              return <div className="nestedContainer" key={index}>
+                <Row>
+                  <Col >
+                    <Form.Group controlId={index} >
+                    <FloatingLabel controlId="" label="Education" className="mb-3">
+                      <Form.Control
+                        type="text"
+                        name="education"
+                        value={education}
+                        placeholder="Enter Education"
+                        onChange={(e) => props.handleEducationChange(e, index)}
+                        required
+                      />
+                       </FloatingLabel>
+                    </Form.Group>
+                    
+                  </Col>
+                  <Col xs="auto">
+
+                    {
+                      <Button variant="danger" size="lg"
+                      className={styles.removeButton}
+                        onClick={(e) => props.removeEducation(e, index)}
+                        disabled={(props.education.length == 1)}>
+                        <i class="bi bi-trash"></i>
+                      </Button>
+
+                    }
+                  
+
+
+                  </Col>
 
 
 
-            </Row>
-            <br />
+                </Row>
+                <br />
 
-          </div>
-        })
+              </div>
+            })
 
-      }
-{/* 
+          }
+           <div className="py-4">
+                    <Button variant="link"
+                  onClick={(e) => props.addEducation()}
+                  disabled={!(props.education.length < 10)} >
+                    
+                      + Add more Education</Button>
+        </div>
+          {/* 
       <Row className="justify-content-between">
         <Col xs="auto">
           <Button variant="primary" onClick={props.prevStep} >
@@ -67,8 +83,22 @@ const EductionForm = (props) => {
           </Button>
         </Col>
       </Row> */}
-    </Form>
+        </Form>
+
+      </div>
+    </>
+
+
+
+
+
+
+
+
+
+
+
   )
-}
+});
 
 export default EductionForm

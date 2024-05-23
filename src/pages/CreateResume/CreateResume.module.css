@@ -15,7 +15,11 @@
 }
 
 .workForm {
-  background-color: #3aa48a;
+  background-color: #f7f0f0;
   padding: 10px;
   margin-bottom: 30px;
+}
+
+.my_custom_divider{
+  border: 2px solid #000; /* Increase the thickness by setting the border width */
 }

@@ -18,6 +18,8 @@ import { getResumeId } from '../../redux/selectors'
 import Tabs from 'react-bootstrap/Tabs';
 import Stack from "react-bootstrap/esm/Stack";
 import Tab from 'react-bootstrap/Tab';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import React, { useRef } from 'react';
 
 const CreateResume = ({ handleNavigation }) => {
   const { state } = useLocation();
@@ -26,6 +28,11 @@ const CreateResume = ({ handleNavigation }) => {
   const [loading, setLoading] = useState(false);
   const [currentTab, setCurrentTab] = useState(0);
 
+  const basicInfoFormRef = useRef(null);
+  const keySkillFormRef = useRef(null);
+  const experienceFormRef = useRef(null);
+  const eductionFormRef = useRef(null);
+  const additionalQualificationsFormRef = useRef(null);
 
   const dummyData = {
     firstName: "RAVIKUMAR",
@@ -87,7 +94,7 @@ const CreateResume = ({ handleNavigation }) => {
   console.log(resumeId)
 
   useEffect(() => {
-    console.log("handleNavigation useEffect resumeId "+resumeId)
+    console.log("handleNavigation useEffect resumeId " + resumeId)
 
     if ((resumeId == null) && (getResumeId() != null && (state?.resumeData) == null)) {
       //handleNavigation(HOME_MENU)
@@ -158,7 +165,13 @@ const CreateResume = ({ handleNavigation }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    resumeId ? updateResume() : createResume()
+    let formRef = getFormRef()
+    if (checkFormValidty(formRef)) {
+      resumeId ? updateResume() : createResume()
+    } else {
+      console.log('Form validation failed.');
+    }
+
   };
 
   const createResume = () => {
@@ -214,10 +227,43 @@ const CreateResume = ({ handleNavigation }) => {
 
   // Function to handle moving to the next step
   const nextStep = () => {
-    setCurrentTab((prev) => prev + 1)
-    setStep((prevStep) => prevStep + 1);
+    //setCurrentTab((prev) => prev + 1)
+    //setStep((prevStep) => prevStep + 1);
+    let formRef = getFormRef()
+    if (checkFormValidty(formRef)) {
+      setCurrentTab((prev) => prev + 1)
+      setStep((prevStep) => prevStep + 1);
+    } else {
+      console.log('Form validation failed.');
+    }
   };
 
+  const getFormRef = () => {
+    if (currentTab == 0) {
+      return basicInfoFormRef
+    } else if (currentTab == 1) {
+      return keySkillFormRef
+    } else if (currentTab == 2) {
+      return experienceFormRef
+    } else if (currentTab == 3) {
+      return eductionFormRef
+    } else {
+      return additionalQualificationsFormRef
+    }
+
+  }
+  const checkFormValidty = (formRef) => {
+    if (formRef.current) {
+      if (typeof formRef.current.requestSubmit === 'function') {
+        formRef.current.requestSubmit();
+      } else {
+        formRef.current.dispatchEvent(
+          new Event('submit', { cancelable: true })
+        );
+      }
+    }
+    return formRef.current.checkValidity()
+  }
   // Function to handle moving to the previous step
   const prevStep = () => {
     setCurrentTab((prev) => prev - 1)
@@ -326,7 +372,7 @@ const CreateResume = ({ handleNavigation }) => {
     experience[index].work[workIndex].work_details.splice(workDetailIndex, 1);
     setFormData({ ...formData, professionalExperience: experience });
   };
-  
+
 
   if (loading)
     return (
@@ -361,9 +407,10 @@ const CreateResume = ({ handleNavigation }) => {
                   formData={formData}
                   handleChange={handleChange}
                   nextStep={nextStep}
+                  ref={basicInfoFormRef}
                 />
               </Tab>
-              <Tab eventKey={1} title="Experience" disabled={currentTab !== 1}>
+              <Tab eventKey={1} title="Skills" disabled={currentTab !== 1}>
                 <KeySkillsForm
                   keySkills={formData.keySkills}
                   handleKeySkillChange={handleKeySkillChange}
@@ -371,9 +418,10 @@ const CreateResume = ({ handleNavigation }) => {
                   addKeySkills={addKeySkills}
                   nextStep={nextStep}
                   prevStep={prevStep}
+                  ref={keySkillFormRef}
                 />
               </Tab>
-              <Tab eventKey={2} title="Education" disabled={currentTab !== 2}>
+              <Tab eventKey={2} title="Experience" disabled={currentTab !== 2}>
                 <ExperienceForm
                   professionalExperience={formData.professionalExperience}
                   handleDesignationChange={handleDesignationChange}
@@ -387,9 +435,10 @@ const CreateResume = ({ handleNavigation }) => {
                   removeWorkDetails={removeWorkDetails}
                   addWorkDetails={addWorkDetails}
                   handleCompanyNameChange={handleCompanyNameChange}
+                  ref={experienceFormRef}
                 />
               </Tab>
-              <Tab eventKey={3} title="Skills" disabled={currentTab !== 3}>
+              <Tab eventKey={3} title="Education" disabled={currentTab !== 3}>
                 <EductionForm
                   education={formData.education}
                   handleEducationChange={handleEducationChange}
@@ -397,6 +446,7 @@ const CreateResume = ({ handleNavigation }) => {
                   addEducation={addEducation}
                   nextStep={nextStep}
                   prevStep={prevStep}
+                  ref={eductionFormRef}
                 />
               </Tab>
               <Tab eventKey={4} title="Additional Info" disabled={currentTab !== 4}>
@@ -409,6 +459,7 @@ const CreateResume = ({ handleNavigation }) => {
                   addAdditionalQualifications={addAdditionalQualifications}
                   handleSubmit={handleSubmit}
                   prevStep={prevStep}
+                  ref={additionalQualificationsFormRef}
                 />
               </Tab>
             </Tabs>
@@ -422,21 +473,21 @@ const CreateResume = ({ handleNavigation }) => {
                 Previous
               </Button>
               {
-                (currentTab != 4 )?( <Button
+                (currentTab != 4) ? (<Button
                   className="btn-primary  ms-auto"
                   disabled={currentTab === 4}
                   onClick={() => nextStep()}
                 >
                   Let's go to next step!
-                </Button>):(  
-              <Button
-                className="btn-primary  ms-auto"
-                onClick={(e) => handleSubmit(e)}
-              >
-                Sumbit
-              </Button>)
+                </Button>) : (
+                  <Button
+                    className="btn-primary  ms-auto"
+                    onClick={(e) => handleSubmit(e)}
+                  >
+                    Sumbit
+                  </Button>)
               }
-           
+
             </Stack>
 
           </Col>

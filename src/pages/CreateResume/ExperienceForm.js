@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap'
 import WorkForm from './WorkForm'
 import styles from "./CreateResume.module.css";
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
-const ExperienceForm = (props) => {
+const ExperienceForm = forwardRef((props, ref)  => {
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log('Form submitted');
+        // Add your form submission logic here
+      };
     return (
-        <Form onSubmit={props.nextStep}>
-            <Form.Label style={{ fontSize: '25px' }}><strong>Professional Experience</strong></Form.Label>
-            <br /><br />
+<>
+            <div className="p-md-5 p-3">
+                <h3 className="mb-0">Let’s work on your experience</h3>
+                <p className="small text-muted mb-5">Start with your most recent job first.</p>
+
+                <Form ref={ref} onSubmit={handleSubmit}>
+   
 
             {
                 props.professionalExperience.map((experience, index) => {
@@ -15,6 +25,7 @@ const ExperienceForm = (props) => {
                         <Row>
                             <Col >
                                 <Form.Group controlId={index} >
+                                <FloatingLabel controlId="" label="Company Name" className="mb-3">
                                     <Form.Control
                                         placeholder="Enter Company Name"
                                         type="text"
@@ -23,6 +34,7 @@ const ExperienceForm = (props) => {
                                         onChange={(e) => props.handleCompanyNameChange(e, index)}
                                         required
                                     />
+                                    </FloatingLabel>
                                 </Form.Group>
                                 <br />
                                 {
@@ -48,29 +60,21 @@ const ExperienceForm = (props) => {
                             </Col>
                             <Col xs="auto">
                                 {
-                                    <Button variant="danger" className={styles.removeButton} 
+                                    <Button variant="outline-danger" size="lg"
                                         onClick={(e) => props.removeExperience(e, index)}
                                         disabled={(props.professionalExperience.length == 1)}>
-                                        Remove
+                                     <i class="bi bi-trash"></i>
                                     </Button>
 
-                                }
-                                {
-                                    <Button variant="success" className={styles.addButton} 
-                                        onClick={(e) => props.addExperience()}
-                                        disabled={!(index == props.professionalExperience.length - 1 && props.professionalExperience.length < 10)} >
-                                        Add
-                                    </Button>
-                                }
+                                }                           
                             </Col>
 
                         </Row>
 
 
+                       { (( props.professionalExperience.length > 1) &&   <hr className={styles.my_custom_divider} />)}
+                      
 
-
-
-                        <br />
 
                     </div>
                 })
@@ -91,9 +95,28 @@ const ExperienceForm = (props) => {
                 </Col>
             </Row> */}
             
-            <br />
+     
         </Form>
+
+        <div className="py-4">
+                    <Button variant="link"
+                     disabled={!(props.professionalExperience.length < 10)}
+                    onClick={(e) => props.addExperience()}>
+                      + Add more Compamy</Button>
+        </div>
+            </div>
+        </>
+
+
+
+
+
+
+
+
+
+        
     )
-}
+});
 
 export default ExperienceForm

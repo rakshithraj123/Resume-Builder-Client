@@ -78,7 +78,7 @@ const ExperienceForm = (props) => {
             }
 
 
-            <Row className="justify-content-between">
+            {/* <Row className="justify-content-between">
                 <Col xs="auto">
                     <Button variant="primary" onClick={props.prevStep} >
                         Previous
@@ -89,7 +89,7 @@ const ExperienceForm = (props) => {
                         Next
                     </Button>
                 </Col>
-            </Row>
+            </Row> */}
             
             <br />
         </Form>

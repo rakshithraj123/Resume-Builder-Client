@@ -12,15 +12,20 @@ import { resumeAddService } from "../../services/resumeAdd.service";
 import { toast } from "react-toastify";
 import { HOME_MENU } from "../../constants";
 import { useLocation } from "react-router-dom";
-import { setResumeId} from '../../redux/'
+import { setResumeId } from '../../redux/'
 import Resume from "./Resume";
-import { getResumeId} from '../../redux/selectors'
+import { getResumeId } from '../../redux/selectors'
+import Tabs from 'react-bootstrap/Tabs';
+import Stack from "react-bootstrap/esm/Stack";
+import Tab from 'react-bootstrap/Tab';
 
 const CreateResume = ({ handleNavigation }) => {
   const { state } = useLocation();
 
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [currentTab, setCurrentTab] = useState(0);
+
 
   const dummyData = {
     firstName: "RAVIKUMAR",
@@ -34,7 +39,7 @@ const CreateResume = ({ handleNavigation }) => {
       "Strategic thinker with a focus on continuous improvement",
       "Customer-centric approach to service delivery",
     ],
-    experience:[],
+    experience: [],
     professionalExperience: [
       {
         company_name:
@@ -76,18 +81,20 @@ const CreateResume = ({ handleNavigation }) => {
     // Add more fields as needed
   };
   const resume = new Resume()
-  const [formData, setFormData] = useState(state?.resumeData? state?.resumeData : resume)
-  const resumeId = state?.resumeId? state?.resumeId : null
+  const [formData, setFormData] = useState(state?.resumeData ? state?.resumeData : resume)
+  const resumeId = state?.resumeId ? state?.resumeId : null
   console.log("create resume")
   console.log(resumeId)
 
   useEffect(() => {
-   if(getResumeId()!= null && (state?.resumeData) == null ){
-        handleNavigation(HOME_MENU)
-   }
+    console.log("handleNavigation useEffect resumeId "+resumeId)
+
+    if ((resumeId == null) && (getResumeId() != null && (state?.resumeData) == null)) {
+      //handleNavigation(HOME_MENU)
+    }
   }, []);
-  
-  
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -167,7 +174,7 @@ const CreateResume = ({ handleNavigation }) => {
           //
           setResumeId(response.data.Resume._id)
           handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id)
-          
+
         } else if (response.status == false) {
           toast(response.message);
         }
@@ -184,16 +191,16 @@ const CreateResume = ({ handleNavigation }) => {
     // Add logic to handle form submission, e.g., send data to backend
     let data = JSON.stringify(formData);
     resumeAddService
-      .update(formData,resumeId)
+      .update(formData, resumeId)
       .then((response) => {
         // console.log(response)
         if (response.status) {
           // toast("Resume creation successful");
           //
-          console.log("setResumeId "+response.data.Resume._id )
+          console.log("setResumeId " + response.data.Resume._id)
           setResumeId(response.data.Resume._id)
           handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id)
-          
+
         } else if (response.status == false) {
           toast(response.message);
         }
@@ -207,11 +214,13 @@ const CreateResume = ({ handleNavigation }) => {
 
   // Function to handle moving to the next step
   const nextStep = () => {
+    setCurrentTab((prev) => prev + 1)
     setStep((prevStep) => prevStep + 1);
   };
 
   // Function to handle moving to the previous step
   const prevStep = () => {
+    setCurrentTab((prev) => prev - 1)
     setStep((prevStep) => prevStep - 1);
   };
 
@@ -317,6 +326,7 @@ const CreateResume = ({ handleNavigation }) => {
     experience[index].work[workIndex].work_details.splice(workDetailIndex, 1);
     setFormData({ ...formData, professionalExperience: experience });
   };
+  
 
   if (loading)
     return (
@@ -327,69 +337,184 @@ const CreateResume = ({ handleNavigation }) => {
       </div>
     );
 
+
+
   return (
-    <div>
-      <Container>
-        {/* <h2>Resume Builder</h2> */}
-        <br /> <br />
-        {step === 1 && (
-          <BasicDetailForm
-            formData={formData}
-            handleChange={handleChange}
-            nextStep={nextStep}
-          />
-        )}
-        {step === 2 && (
-          <KeySkillsForm
-            keySkills={formData.keySkills}
-            handleKeySkillChange={handleKeySkillChange}
-            removeKeySkills={removeKeySkills}
-            addKeySkills={addKeySkills}
-            nextStep={nextStep}
-            prevStep={prevStep}
-          />
-        )}
-        {step === 3 && (
-          <ExperienceForm
-            professionalExperience={formData.professionalExperience}
-            handleDesignationChange={handleDesignationChange}
-            handleWorkDetailChange={handleWorkDetailChange}
-            removeExperience={removeExperience}
-            addExperience={addExperience}
-            nextStep={nextStep}
-            prevStep={prevStep}
-            removeWork={removeWork}
-            addWork={addWork}
-            removeWorkDetails={removeWorkDetails}
-            addWorkDetails={addWorkDetails}
-            handleCompanyNameChange={handleCompanyNameChange}
-          />
-        )}
-        {step === 4 && (
-          <EductionForm
-            education={formData.education}
-            handleEducationChange={handleEducationChange}
-            removeEducation={removeEducation}
-            addEducation={addEducation}
-            nextStep={nextStep}
-            prevStep={prevStep}
-          />
-        )}
-        {step === 5 && (
-          <AdditionalQualificationsForm
-            additionalQualifications={formData.additionalQualifications}
-            handleAdditionalQualificationsChange={
-              handleAdditionalQualificationsChange
-            }
-            removeAdditionalQualifications={removeAdditionalQualifications}
-            addAdditionalQualifications={addAdditionalQualifications}
-            handleSubmit={handleSubmit}
-            prevStep={prevStep}
-          />
-        )}
+    <>
+      <div className="p-5 bg-primary">
+        <Container>
+          <Row>
+            <Col>
+              <div className="p-md-5 p-3">
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <Container className="bg-white rounded-top mt-n5 shadow">
+        <Row>
+          <Col className="px-md-5 p-2 pt-md-2 pb-md-5">
+
+            <Tabs activeKey={currentTab} id="" variant="underline">
+              <Tab eventKey={0} title="Summary" disabled={currentTab !== 0}>
+                <BasicDetailForm
+                  formData={formData}
+                  handleChange={handleChange}
+                  nextStep={nextStep}
+                />
+              </Tab>
+              <Tab eventKey={1} title="Experience" disabled={currentTab !== 1}>
+                <KeySkillsForm
+                  keySkills={formData.keySkills}
+                  handleKeySkillChange={handleKeySkillChange}
+                  removeKeySkills={removeKeySkills}
+                  addKeySkills={addKeySkills}
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                />
+              </Tab>
+              <Tab eventKey={2} title="Education" disabled={currentTab !== 2}>
+                <ExperienceForm
+                  professionalExperience={formData.professionalExperience}
+                  handleDesignationChange={handleDesignationChange}
+                  handleWorkDetailChange={handleWorkDetailChange}
+                  removeExperience={removeExperience}
+                  addExperience={addExperience}
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                  removeWork={removeWork}
+                  addWork={addWork}
+                  removeWorkDetails={removeWorkDetails}
+                  addWorkDetails={addWorkDetails}
+                  handleCompanyNameChange={handleCompanyNameChange}
+                />
+              </Tab>
+              <Tab eventKey={3} title="Skills" disabled={currentTab !== 3}>
+                <EductionForm
+                  education={formData.education}
+                  handleEducationChange={handleEducationChange}
+                  removeEducation={removeEducation}
+                  addEducation={addEducation}
+                  nextStep={nextStep}
+                  prevStep={prevStep}
+                />
+              </Tab>
+              <Tab eventKey={4} title="Additional Info" disabled={currentTab !== 4}>
+                <AdditionalQualificationsForm
+                  additionalQualifications={formData.additionalQualifications}
+                  handleAdditionalQualificationsChange={
+                    handleAdditionalQualificationsChange
+                  }
+                  removeAdditionalQualifications={removeAdditionalQualifications}
+                  addAdditionalQualifications={addAdditionalQualifications}
+                  handleSubmit={handleSubmit}
+                  prevStep={prevStep}
+                />
+              </Tab>
+            </Tabs>
+
+            <Stack gap={3} direction="horizontal" className="mt-3">
+              <Button
+                className="btn-outline-primary bg-transparent text-primary"
+                disabled={currentTab === 0}
+                onClick={() => prevStep()}
+              >
+                Previous
+              </Button>
+              {
+                (currentTab != 4 )?( <Button
+                  className="btn-primary  ms-auto"
+                  disabled={currentTab === 4}
+                  onClick={() => nextStep()}
+                >
+                  Let's go to next step!
+                </Button>):(  
+              <Button
+                className="btn-primary  ms-auto"
+                onClick={(e) => handleSubmit(e)}
+              >
+                Sumbit
+              </Button>)
+              }
+           
+            </Stack>
+
+          </Col>
+        </Row>
       </Container>
-    </div>
-  );
+    </>
+  )
+
+
+
+
+
+
+
+
+  // return (
+  //   <div>
+  //     <Container>
+  //       {/* <h2>Resume Builder</h2> */}
+  //       <br /> <br />
+  //       {step === 1 && (
+  //         <BasicDetailForm
+  //           formData={formData}
+  //           handleChange={handleChange}
+  //           nextStep={nextStep}
+  //         />
+  //       )}
+  //       {step === 2 && (
+  //         <KeySkillsForm
+  //           keySkills={formData.keySkills}
+  //           handleKeySkillChange={handleKeySkillChange}
+  //           removeKeySkills={removeKeySkills}
+  //           addKeySkills={addKeySkills}
+  //           nextStep={nextStep}
+  //           prevStep={prevStep}
+  //         />
+  //       )}
+  //       {step === 3 && (
+  //         <ExperienceForm
+  //           professionalExperience={formData.professionalExperience}
+  //           handleDesignationChange={handleDesignationChange}
+  //           handleWorkDetailChange={handleWorkDetailChange}
+  //           removeExperience={removeExperience}
+  //           addExperience={addExperience}
+  //           nextStep={nextStep}
+  //           prevStep={prevStep}
+  //           removeWork={removeWork}
+  //           addWork={addWork}
+  //           removeWorkDetails={removeWorkDetails}
+  //           addWorkDetails={addWorkDetails}
+  //           handleCompanyNameChange={handleCompanyNameChange}
+  //         />
+  //       )}
+  //       {step === 4 && (
+  //         <EductionForm
+  //           education={formData.education}
+  //           handleEducationChange={handleEducationChange}
+  //           removeEducation={removeEducation}
+  //           addEducation={addEducation}
+  //           nextStep={nextStep}
+  //           prevStep={prevStep}
+  //         />
+  //       )}
+  //       {step === 5 && (
+  //         <AdditionalQualificationsForm
+  //           additionalQualifications={formData.additionalQualifications}
+  //           handleAdditionalQualificationsChange={
+  //             handleAdditionalQualificationsChange
+  //           }
+  //           removeAdditionalQualifications={removeAdditionalQualifications}
+  //           addAdditionalQualifications={addAdditionalQualifications}
+  //           handleSubmit={handleSubmit}
+  //           prevStep={prevStep}
+  //         />
+  //       )}
+  //     </Container>
+  //   </div>
+  // );
 };
 
 export default CreateResume;

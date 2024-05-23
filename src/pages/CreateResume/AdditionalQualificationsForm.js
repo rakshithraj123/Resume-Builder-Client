@@ -53,7 +53,7 @@ const AdditionalQualificationsForm = (props) => {
 
       }
 
-      <Row className="justify-content-between">
+      {/* <Row className="justify-content-between">
         <Col xs="auto">
           <Button variant="primary" onClick={props.prevStep} >
             Previous
@@ -64,7 +64,7 @@ const AdditionalQualificationsForm = (props) => {
             Submit
           </Button>
         </Col>
-      </Row>
+      </Row> */}
     </Form>
   )
 }

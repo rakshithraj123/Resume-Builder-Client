@@ -54,7 +54,7 @@ const EductionForm = (props) => {
         })
 
       }
-
+{/* 
       <Row className="justify-content-between">
         <Col xs="auto">
           <Button variant="primary" onClick={props.prevStep} >
@@ -66,7 +66,7 @@ const EductionForm = (props) => {
             Next
           </Button>
         </Col>
-      </Row>
+      </Row> */}
     </Form>
   )
 }

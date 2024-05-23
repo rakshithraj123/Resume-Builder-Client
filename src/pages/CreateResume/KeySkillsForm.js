@@ -52,7 +52,7 @@ const KeySkillsForm = (props) => {
 
       }
 
-      <Row className="justify-content-between">
+      {/* <Row className="justify-content-between">
         <Col xs="auto">
           <Button variant="primary" onClick={props.prevStep} >
             Previous
@@ -63,7 +63,7 @@ const KeySkillsForm = (props) => {
             Next
           </Button>
         </Col>
-      </Row>
+      </Row> */}
     </Form>
   )
 }

@@ -69,7 +69,7 @@ const BasicDetailForm = ({ formData, handleChange,nextStep}) => {
       </Form.Group>
       <br />
 
-      <Row className="justify-content-between">
+      {/* <Row className="justify-content-between">
         <Col xs="auto">
           <Button variant="primary" disabled>
             Previous
@@ -80,7 +80,7 @@ const BasicDetailForm = ({ formData, handleChange,nextStep}) => {
             Next
           </Button>
         </Col>
-      </Row>
+      </Row> */}
     </Form>
   )
 }

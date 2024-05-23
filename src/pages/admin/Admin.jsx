@@ -1,6 +1,5 @@
   import React, { useState, useEffect } from "react";
   import DataTable from 'react-data-table-component';
-  import Header from "../../components/Header/Header";
   import Container from 'react-bootstrap/Container';
   import Row from 'react-bootstrap/Row';
   import Col from 'react-bootstrap/Col';
@@ -97,7 +96,7 @@
 
     return (
       <>
-        <Header />
+     
         <div className="p-5 bg-primary">
           <Container>
             <Row>

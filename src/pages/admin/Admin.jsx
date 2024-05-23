@@ -11,10 +11,11 @@ import { adminService } from "../../services/admin.service";
 import { toast } from "react-toastify";
 import Button from 'react-bootstrap/Button';
 
-const columns = (handleView) => [
+
+const columns  = (handleView) => [
   {
     name: 'Name',
-    selector: row => row.firstName + " " + row.lastName,
+    selector: row => row.firstName+" "+row.lastName,
     sortable: true,
   },
   {
@@ -40,64 +41,51 @@ function Dashboard() {
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const rowsPerPage = 10;
 
   useEffect(() => {
-    fetchData(currentPage);
-  }, [currentPage]);
+    const fetchData = async () => {
+      const updatedFormData = {
+        startPage: 1,
+        endPage: 99999,
+        rowCount: 10, // Convert rowCount to string
+        searchTerm: ''
+      };
 
-  const fetchData = async (page) => {
-    setLoading(true);
-    const updatedFormData = {
-      startPage: page,
-      endPage: page,
-      rowCount: rowsPerPage,
-      searchTerm: ''
-    };
-
-    adminService
+      adminService
       .userList(updatedFormData)
       .then((response) => {
-        if (response.status) {
+          setLoading(false);
+          if (response.status) {
           setRecords(response.data.User.SearchResult);
           setFilteredRecords(response.data.User.SearchResult);
-          setTotalPages(response.data.User.totalPages);
-          console.log("Total pages ", response.data.User.totalPages);
-        } else {
-          setRecords([]);
-          setFilteredRecords([]);
-          setTotalPages(0);
-          toast("No data found.");
-        }
+          setLoading(false);
+          } else {
+            setRecords([]);
+            toast("No data found.");
+          }
+        
       })
       .catch((err) => {
-        setRecords([]);
-        setFilteredRecords([]);
-        setTotalPages(0);
+        setRecords([]);        
         console.log("Error ", err);
       })
       .finally(() => {
         setLoading(false);
       });
-  };
+    };
+
+    fetchData();
+  }, []);
 
   function handleFilter(event) {
     const value = event.target.value.toLowerCase();
-    const filteredData = records.filter(row =>
-      (row.firstName && row.firstName.toLowerCase().includes(value)) ||
-      (row.lastName && row.lastName.toLowerCase().includes(value)) ||
-      (row.designation && row.designation.toLowerCase().includes(value))
+    const filteredData = records.filter(row => 
+      (row.firstName&&row.firstName.toLowerCase().includes(value))||
+      (row.lastName&&row.lastName.toLowerCase().includes(value))||
+      (row.designation&&row.designation.toLowerCase().includes(value))
     );
     setFilteredRecords(filteredData);
   }
-
-  function handlePageChange(page) {
-    console.log("handlePageChange ", page);
-    setCurrentPage(page);
-  }
-
   function handleView(row) {
     console.log("View button clicked for:", row);
     // Add your view logic here, e.g., navigate to a detail page or show a modal with user details
@@ -135,10 +123,6 @@ function Dashboard() {
                 columns={columns(handleView)}
                 data={filteredRecords}
                 pagination
-                paginationServer
-                paginationTotalRows={totalPages * rowsPerPage}
-                paginationPerPage={rowsPerPage}
-                onChangePage={handlePageChange}
               />
             )}
           </Col>

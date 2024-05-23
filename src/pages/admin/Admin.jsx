@@ -82,6 +82,7 @@
       const filteredData = records.filter(row => 
         (row.firstName&&row.firstName.toLowerCase().includes(value))||
         (row.lastName&&row.lastName.toLowerCase().includes(value))||
+        (row.email&&row.email.toLowerCase().includes(value))||
         (row.designation&&row.designation.toLowerCase().includes(value))
       );
       setFilteredRecords(filteredData);

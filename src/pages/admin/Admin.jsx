@@ -46,13 +46,17 @@ function Dashboard({ handleNavigation }) {
   const [currntPage, setCurrntPage] = useState(1);
   const [searchContent, setSearchText] = useState('');
   var previousSearchContent = ""
-  // Debounce the handleSearchChange function
+  const [fetchedStartPage, setfetchedStartPage] = useState(0); 
+  const [fetchedLastPage, setFetchedLastPage] = useState(0); 
+  const [cachedRecords, setCachedRecords] = useState([]); 
+  const NUMBER_OF_PAGES_TO_FETCH = 4
 
   useEffect(() => {
-    if(searchContent != previousSearchContent){
+
+    if(searchContent != previousSearchContent){ //
       delayedSearch(searchContent)
     }else{   
-      fetchData(currntPage, currntPage, rowsPerPage, searchContent);
+      fetchData(currntPage, currntPage+(NUMBER_OF_PAGES_TO_FETCH-1), rowsPerPage, searchContent);
     }
   }, [searchContent,rowsPerPage]);
 
@@ -60,11 +64,38 @@ function Dashboard({ handleNavigation }) {
     console.log('Performing search for:', term);
     // Perform search operation here...
     // For demonstration, just setting a dummy result
-    fetchData(currntPage, currntPage, rowsPerPage, searchContent);
+    fetchData(currntPage, currntPage+(NUMBER_OF_PAGES_TO_FETCH-1), rowsPerPage, searchContent);
   }, 1000); // 1000 milliseconds debounce delay
 
+  /**
+   * divide records into given number of parts
+   * @param {*} array 
+   * @param {*} parts 
+   * @param {*} rowsToDisplay 
+   * @returns 
+   */
+  const divideRecords = (array, parts,rowsToDisplay) => {  
+
+    if(array.length<=rowsToDisplay){ // if arraylength is less then rowsToDisplay then divide one part
+     parts = 1
+    }else{
+      // reduce the parts till each divide array gets (rowsToDisplay)number of items 
+     while(array.length < (rowsToDisplay*(parts-1)) ){
+       parts = parts-1
+     }
+    }
+    
+     const newArray = [...array];
+     const dividedArrays = [];
+     const chunkSize = rowsToDisplay;
+     
+     for (let i = 0; i < parts; i++) {
+       dividedArrays.push(newArray.splice(0, chunkSize));
+     }     
+     return dividedArrays;
+   };
+
   const fetchData = async (startPage, endPage, rowCount, searchTerm) => {
-    console.log("rakshith fetchData called")
     setLoading(true);
     const updatedFormData = {
       startPage: startPage,
@@ -77,7 +108,23 @@ function Dashboard({ handleNavigation }) {
       .userList(updatedFormData)
       .then((response) => {
         if (response.status) {
-          setRecords(response.data.User.SearchResult);
+          setfetchedStartPage(startPage)
+          setFetchedLastPage(endPage)
+          
+          //setRecords(response.data.User.SearchResult);
+          let dividedRecords = divideRecords(response.data.User.SearchResult,NUMBER_OF_PAGES_TO_FETCH,rowsPerPage)
+          setRecords(dividedRecords[0]);
+
+          let clearCacheData = (startPage == 1)
+          if(clearCacheData){   
+            setCachedRecords(dividedRecords)
+            console.log(dividedRecords)
+          }else{
+            let updatedRecords= cachedRecords.concat(dividedRecords)
+            setCachedRecords(updatedRecords)
+            console.log(updatedRecords)
+          } 
+
           //setFilteredRecords(response.data.User.SearchResult);
           setTotalPages(response.data.User.totalPages);
         } else {
@@ -96,21 +143,12 @@ function Dashboard({ handleNavigation }) {
 
   function handleFilter(event) {
     const value = event.target.value.toLowerCase();
-    // const filteredData = records.filter(row => 
-    //   (row.firstName&&row.firstName.toLowerCase().includes(value))||
-    //   (row.lastName&&row.lastName.toLowerCase().includes(value))||
-    //   (row.email&&row.email.toLowerCase().includes(value))||
-    //   (row.designation&&row.designation.toLowerCase().includes(value))
-    // );
-    // setFilteredRecords(filteredData);
     previousSearchContent = searchContent
     delayedSearch.cancel();
     setCurrntPage(1)
     setSearchText(value)
   }
   function handleView(row) {
-    console.log("View button clicked for:", row);
-    // Add your view logic here, e.g., navigate to a detail page or show a modal with user details
     if (row.resumeId != null) {
       handleNavigation(PREVIEW_RESUME_MENU, row.resumeId)
     }
@@ -119,10 +157,14 @@ function Dashboard({ handleNavigation }) {
   const handlePageChange = (pageNumber) => {
     if (pageNumber != currntPage) {
       setCurrntPage(pageNumber)
-      fetchData(pageNumber, pageNumber, rowsPerPage, searchContent);
+      if(pageNumber <=fetchedLastPage ){
+        setRecords(cachedRecords[pageNumber - 1]);
+      }else{
+        fetchData(pageNumber, pageNumber+(NUMBER_OF_PAGES_TO_FETCH-1), rowsPerPage, searchContent);
+      }    
     }
   };
-
+  
   const handleRowsPerPageChange = (newRowsPerPage, currentPage) => {
     if (newRowsPerPage != rowsPerPage) {
       setCurrntPage(1)
@@ -154,10 +196,7 @@ function Dashboard({ handleNavigation }) {
                   <Form.Control type="text" onChange={handleFilter} />
                 </FloatingLabel>
               </Col>
-            </Row>
-            {loading ? (
-              <div>Loading...</div>
-            ) : (
+            </Row>    
               <DataTable
                 columns={columns(handleView)}
                 data={records}
@@ -170,8 +209,9 @@ function Dashboard({ handleNavigation }) {
                 paginationDefaultPage={currntPage}
                 onChangePage={handlePageChange}
                 onChangeRowsPerPage={handleRowsPerPageChange}
+                paginationIconFirstPage={null}
+                paginationIconLastPage={null}
               />
-            )}
           </Col>
         </Row>
       </Container>

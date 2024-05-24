@@ -62,8 +62,6 @@ function Dashboard({ handleNavigation }) {
 
   const delayedSearch = debounce((term) => {
     console.log('Performing search for:', term);
-    // Perform search operation here...
-    // For demonstration, just setting a dummy result
     fetchData(currntPage, currntPage+(NUMBER_OF_PAGES_TO_FETCH-1), rowsPerPage, searchContent);
   }, 1000); // 1000 milliseconds debounce delay
 
@@ -141,6 +139,10 @@ function Dashboard({ handleNavigation }) {
       });
   };
 
+/**
+ * handle serach 
+ * @param {*} event 
+ */
   function handleFilter(event) {
     const value = event.target.value.toLowerCase();
     previousSearchContent = searchContent
@@ -148,6 +150,7 @@ function Dashboard({ handleNavigation }) {
     setCurrntPage(1)
     setSearchText(value)
   }
+
   function handleView(row) {
     if (row.resumeId != null) {
       handleNavigation(PREVIEW_RESUME_MENU, row.resumeId)

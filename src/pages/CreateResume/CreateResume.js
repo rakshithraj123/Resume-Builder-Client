@@ -262,8 +262,32 @@ const CreateResume = ({ handleNavigation }) => {
         );
       }
     }
-    return formRef.current.checkValidity()
+    let isAllRequiredValueFilled = formRef.current.checkValidity()
+     
+    if(isAllRequiredValueFilled){
+      return vaildatedFormData()
+    }else{
+      return false
+    }
   }
+
+  const vaildatedFormData = () => {
+         if(currentTab == 0){
+           return vaildatedBasicFormData()
+         }else{
+          return true
+         }
+  }
+
+  const vaildatedBasicFormData = () => {
+      if(formData.phoneNumber.length < 10){
+        console.log("invalid phonenumber")
+        return false
+      }else{
+        return true
+      }
+   }
+
   // Function to handle moving to the previous step
   const prevStep = () => {
     setCurrentTab((prev) => prev - 1)

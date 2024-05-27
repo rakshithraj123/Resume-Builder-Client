@@ -7,7 +7,6 @@ const AdditionalQualificationsForm = forwardRef((props, ref)  => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Form submitted');
-    props.handleSubmit(event)
     // Add your form submission logic here
   };
   return (

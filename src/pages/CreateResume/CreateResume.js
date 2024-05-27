@@ -560,7 +560,6 @@ const CreateResume = ({ handleNavigation }) => {
                     removeAdditionalQualifications
                   }
                   addAdditionalQualifications={addAdditionalQualifications}
-                  handleSubmit={handleSubmit}
                   prevStep={prevStep}
                   ref={additionalQualificationsFormRef}
                 />

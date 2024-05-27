@@ -65,7 +65,7 @@ const BasicDetailForm = forwardRef((props, ref)  => {
           <Form.Group controlId="phoneNumber" >
           <FloatingLabel controlId="" label="Phone Number" className="mb-3">       
             <Form.Control
-              type="tel"
+              type='tel'
               name="phoneNumber"
               value={formData.phoneNumber}
               onChange={handleChange}

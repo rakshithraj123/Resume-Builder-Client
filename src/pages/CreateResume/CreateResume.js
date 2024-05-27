@@ -12,14 +12,14 @@ import { resumeAddService } from "../../services/resumeAdd.service";
 import { toast } from "react-toastify";
 import { HOME_MENU } from "../../constants";
 import { useLocation } from "react-router-dom";
-import { setResumeId } from '../../redux/'
+import { setResumeId } from "../../redux/";
 import Resume from "./Resume";
-import { getResumeId } from '../../redux/selectors'
-import Tabs from 'react-bootstrap/Tabs';
+import { getResumeId } from "../../redux/selectors";
+import Tabs from "react-bootstrap/Tabs";
 import Stack from "react-bootstrap/esm/Stack";
-import Tab from 'react-bootstrap/Tab';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import React, { useRef } from 'react';
+import Tab from "react-bootstrap/Tab";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import React, { useRef } from "react";
 
 const CreateResume = ({ handleNavigation }) => {
   const { state } = useLocation();
@@ -87,20 +87,25 @@ const CreateResume = ({ handleNavigation }) => {
 
     // Add more fields as needed
   };
-  const resume = new Resume()
-  const [formData, setFormData] = useState(state?.resumeData ? state?.resumeData : resume)
-  const resumeId = state?.resumeId ? state?.resumeId : null
-  console.log("create resume")
-  console.log(resumeId)
+  const resume = new Resume();
+  const [formData, setFormData] = useState(
+    state?.resumeData ? state?.resumeData : resume
+  );
+  const resumeId = state?.resumeId ? state?.resumeId : null;
+  console.log("create resume");
+  console.log(resumeId);
 
   useEffect(() => {
-    console.log("handleNavigation useEffect resumeId " + resumeId)
+    console.log("handleNavigation useEffect resumeId " + resumeId);
 
-    if ((resumeId == null) && (getResumeId() != null && (state?.resumeData) == null)) {
+    if (
+      resumeId == null &&
+      getResumeId() != null &&
+      state?.resumeData == null
+    ) {
       //handleNavigation(HOME_MENU)
     }
   }, []);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -165,17 +170,16 @@ const CreateResume = ({ handleNavigation }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let formRef = getFormRef()
+    let formRef = getFormRef();
     if (checkFormValidty(formRef)) {
-      resumeId ? updateResume() : createResume()
+      resumeId ? updateResume() : createResume();
     } else {
-      console.log('Form validation failed.');
+      console.log("Form validation failed. Submit");
     }
-
   };
 
   const createResume = () => {
-    setLoading(true)
+    setLoading(true);
     // Add logic to handle form submission, e.g., send data to backend
     let data = JSON.stringify(formData);
     resumeAddService
@@ -185,22 +189,22 @@ const CreateResume = ({ handleNavigation }) => {
         if (response.status) {
           // toast("Resume creation successful");
           //
-          setResumeId(response.data.Resume._id)
-          handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id)
-
+          setResumeId(response.data.Resume._id);
+          handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id);
         } else if (response.status == false) {
           toast(response.message);
         }
       })
       .catch((err) => {
         console.log(err);
-      }).finally(() => {
-        setLoading(false)
       })
-  }
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const updateResume = () => {
-    setLoading(true)
+    setLoading(true);
     // Add logic to handle form submission, e.g., send data to backend
     let data = JSON.stringify(formData);
     resumeAddService
@@ -210,87 +214,153 @@ const CreateResume = ({ handleNavigation }) => {
         if (response.status) {
           // toast("Resume creation successful");
           //
-          console.log("setResumeId " + response.data.Resume._id)
-          setResumeId(response.data.Resume._id)
-          handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id)
-
+          console.log("setResumeId " + response.data.Resume._id);
+          setResumeId(response.data.Resume._id);
+          handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id);
         } else if (response.status == false) {
           toast(response.message);
         }
       })
       .catch((err) => {
         console.log(err);
-      }).finally(() => {
-        setLoading(false)
       })
-  }
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   // Function to handle moving to the next step
   const nextStep = () => {
     //setCurrentTab((prev) => prev + 1)
     //setStep((prevStep) => prevStep + 1);
-    let formRef = getFormRef()
+    let formRef = getFormRef();
     if (checkFormValidty(formRef)) {
-      setCurrentTab((prev) => prev + 1)
+      setCurrentTab((prev) => prev + 1);
       setStep((prevStep) => prevStep + 1);
     } else {
-      console.log('Form validation failed.');
+      console.log("Form validation failed. Next step");
     }
   };
 
   const getFormRef = () => {
-    if (currentTab == 0) {
-      return basicInfoFormRef
-    } else if (currentTab == 1) {
-      return keySkillFormRef
-    } else if (currentTab == 2) {
-      return experienceFormRef
-    } else if (currentTab == 3) {
-      return eductionFormRef
+    if (currentTab === 0) {
+      return basicInfoFormRef;
+    } else if (currentTab === 1) {
+      return keySkillFormRef;
+    } else if (currentTab === 2) {
+      return experienceFormRef;
+    } else if (currentTab === 3) {
+      return eductionFormRef;
     } else {
-      return additionalQualificationsFormRef
+      return additionalQualificationsFormRef;
     }
-
-  }
+  };
   const checkFormValidty = (formRef) => {
     if (formRef.current) {
-      if (typeof formRef.current.requestSubmit === 'function') {
+      if (typeof formRef.current.requestSubmit === "function") {
         formRef.current.requestSubmit();
       } else {
         formRef.current.dispatchEvent(
-          new Event('submit', { cancelable: true })
+          new Event("submit", { cancelable: true })
         );
       }
     }
-    let isAllRequiredValueFilled = formRef.current.checkValidity()
-     
-    if(isAllRequiredValueFilled){
-      return vaildatedFormData()
-    }else{
-      return false
+    let isAllRequiredValueFilled = formRef.current.checkValidity();
+
+    if (isAllRequiredValueFilled) {
+      return vaildatedFormData();
+    } else {
+      return false;
     }
-  }
+  };
 
   const vaildatedFormData = () => {
-         if(currentTab == 0){
-           return vaildatedBasicFormData()
-         }else{
-          return true
-         }
-  }
+    if (currentTab === 0) {
+      return vaildatedBasicFormData();
+    } else if (currentTab === 1) {
+      return vaildatedSkillsData();
+    } else if (currentTab === 2) {
+      return vaildatedProfessionalExperienceData();
+    } else if (currentTab === 3) {
+      return vaildatedEducationData();
+    } else if (currentTab === 4) {
+      return vaildatedAdditionalInfoData();
+    } else {
+      return true;
+    }
+  };
 
   const vaildatedBasicFormData = () => {
-      if(formData.phoneNumber.length < 10){
-        console.log("invalid phonenumber")
-        return false
-      }else{
-        return true
-      }
-   }
+    const userNameRegex = /^[a-zA-Z]+$/;
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (formData.firstName.length < 3) {
+      console.log("First name cannot be less than 3 characters");
+      toast("First name cannot be less than 3 characters");
+      return false;
+    } else if (!userNameRegex.test(formData.firstName)) {
+      console.log("First name cannot contain special characters or numbers");
+      toast("First name cannot contain special characters or numbers");
+      return false;
+    } else if (formData.lastName.length < 3) {
+      console.log("Last name cannot be less than 3 characters");
+      toast("Last name cannot be less than 3 characters");
+      return false;
+    } else if (!userNameRegex.test(formData.lastName)) {
+      console.log("Last name cannot contain special characters or numbers");
+      toast("Last name cannot contain special characters or numbers");
+      return false;
+    } else if (!phoneRegex.test(formData.phoneNumber)) {
+      console.log("Invalid phone number. It must be exactly 10 digits and contain only numbers");
+      toast("Invalid phone number. It must be exactly 10 digits and contain only numbers");
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const vaildatedSkillsData = () => {
+    if (formData.keySkills.length < 3) {
+      toast("Minimum 3 skills is required");
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const vaildatedProfessionalExperienceData = () => {
+    if (formData.professionalExperience.length < 1) {
+      console.log("Atleast one professional experience is required");
+      toast("Atleast one professional experience is required");
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const vaildatedEducationData = () => {
+    if (formData.education.length < 1) {
+      console.log("Atleast one education details is required");
+      toast("Atleast one education details is required");
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const vaildatedAdditionalInfoData = () => {
+    if (formData.additionalQualifications.length < 1) {
+      console.log("Atleast one additional qualification is required");
+      toast("Atleast one additional qualification is required");
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   // Function to handle moving to the previous step
   const prevStep = () => {
-    setCurrentTab((prev) => prev - 1)
+    setCurrentTab((prev) => prev - 1);
     setStep((prevStep) => prevStep - 1);
   };
 
@@ -397,17 +467,22 @@ const CreateResume = ({ handleNavigation }) => {
     setFormData({ ...formData, professionalExperience: experience });
   };
 
-
   if (loading)
     return (
-      <div class="text-center" style={{ height: "calc(100vh - 100px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
+      <div
+        class="text-center"
+        style={{
+          height: "calc(100vh - 100px)",
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+        }}
+      >
         <div class="spinner-border" role="status">
           <span class="sr-only"></span>
         </div>
       </div>
     );
-
-
 
   return (
     <>
@@ -415,8 +490,7 @@ const CreateResume = ({ handleNavigation }) => {
         <Container>
           <Row>
             <Col>
-              <div className="p-md-5 p-3">
-              </div>
+              <div className="p-md-5 p-3"></div>
             </Col>
           </Row>
         </Container>
@@ -424,7 +498,6 @@ const CreateResume = ({ handleNavigation }) => {
       <Container className="bg-white rounded-top mt-n5 shadow">
         <Row>
           <Col className="px-md-5 p-2 pt-md-2 pb-md-5">
-
             <Tabs activeKey={currentTab} id="" variant="underline">
               <Tab eventKey={0} title="Summary" disabled={currentTab !== 0}>
                 <BasicDetailForm
@@ -473,13 +546,19 @@ const CreateResume = ({ handleNavigation }) => {
                   ref={eductionFormRef}
                 />
               </Tab>
-              <Tab eventKey={4} title="Additional Info" disabled={currentTab !== 4}>
+              <Tab
+                eventKey={4}
+                title="Additional Info"
+                disabled={currentTab !== 4}
+              >
                 <AdditionalQualificationsForm
                   additionalQualifications={formData.additionalQualifications}
                   handleAdditionalQualificationsChange={
                     handleAdditionalQualificationsChange
                   }
-                  removeAdditionalQualifications={removeAdditionalQualifications}
+                  removeAdditionalQualifications={
+                    removeAdditionalQualifications
+                  }
                   addAdditionalQualifications={addAdditionalQualifications}
                   handleSubmit={handleSubmit}
                   prevStep={prevStep}
@@ -496,36 +575,28 @@ const CreateResume = ({ handleNavigation }) => {
               >
                 Previous
               </Button>
-              {
-                (currentTab != 4) ? (<Button
+              {currentTab != 4 ? (
+                <Button
                   className="btn-primary  ms-auto"
                   disabled={currentTab === 4}
                   onClick={() => nextStep()}
                 >
                   Let's go to next step!
-                </Button>) : (
-                  <Button
-                    className="btn-primary  ms-auto"
-                    onClick={(e) => handleSubmit(e)}
-                  >
-                    Sumbit
-                  </Button>)
-              }
-
+                </Button>
+              ) : (
+                <Button
+                  className="btn-primary  ms-auto"
+                  onClick={(e) => handleSubmit(e)}
+                >
+                  Sumbit
+                </Button>
+              )}
             </Stack>
-
           </Col>
         </Row>
       </Container>
     </>
-  )
-
-
-
-
-
-
-
+  );
 
   // return (
   //   <div>

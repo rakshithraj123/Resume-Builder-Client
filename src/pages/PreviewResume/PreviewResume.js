@@ -96,7 +96,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
         </Container>
       </div>
 
-      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow">
+      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow" style={{ height: '600px', overflow:'auto', scrollbarWidth:'none' }}>
         <Row>
           <Col>
 

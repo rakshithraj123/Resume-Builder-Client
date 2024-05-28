@@ -35,7 +35,7 @@ const WorkForm = (props) => {
                 <br />
                 {
                     props.work.work_details.map((workDetail, workDetailIndex) => {
-                        return <Row className="mb-md-3 me-5 align-items-center">
+                        return <Row className="mb-3 md-3 me-5 align-items-center">
                             <Form.Group as={Col} controlId={workDetailIndex}>
                                 <FloatingLabel controlId="" label="Work Detail" className="mb-3">
                                     <Form.Control type="text" placeholder=" " value={workDetail}
@@ -99,7 +99,7 @@ const WorkForm = (props) => {
                 }
 
 
-                <div className="py-4">
+                <div style={{ marginTop: '-10px' }}>
                     <Button variant="link"
                         disabled={props.addWorkDisabled}
                         onClick={(e) => props.addWork(props.index)}>

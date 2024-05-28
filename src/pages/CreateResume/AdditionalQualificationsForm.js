@@ -38,7 +38,7 @@ const AdditionalQualificationsForm = forwardRef((props, ref)  => {
                   </Col>
                   <Col xs="auto">
                     {
-                      <Button ariant="outline-danger" size="lg" className={styles.removeButton}
+                      <Button variant="outline-danger" size="lg"
                         onClick={(e) => props.removeAdditionalQualifications(e, index)}
                         disabled={(props.additionalQualifications.length == 1)}>
                         <i class="bi bi-trash"></i>
@@ -72,7 +72,7 @@ const AdditionalQualificationsForm = forwardRef((props, ref)  => {
   </Col>
 </Row> */}
         </Form>
-        <div className="py-4">
+        <div style={{ marginTop: '-15px' }}>
                     <Button variant="link"
                      disabled={!(props.additionalQualifications.length < 10)}
                     onClick={(e) => props.addAdditionalQualifications()}>

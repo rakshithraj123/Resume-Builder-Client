@@ -70,10 +70,13 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
 
   if (loading)
     return (
-      <div class="text-center" style={{ height: "calc(100vh - 100px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
-        <div class="spinner-border" role="status">
-          <span class="sr-only"></span>
-        </div>
+      // <div class="text-center" style={{ height: "calc(100vh - 0px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
+      //   <div class="spinner-border" role="status">
+      //     <span class="sr-only"></span>
+      //   </div>
+      // </div>
+      <div>
+        
       </div>
     );
 

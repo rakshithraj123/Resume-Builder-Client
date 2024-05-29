@@ -23,8 +23,9 @@ function Landing({ user, handleNavigation }) {
 
   return (
     <>
-      <div className={`p-md-5 pt-5 p-3 bg-primary ${styles.minVh} text-center align-items-center d-flex`} >
-        <Container>
+      {/* <div className={`p-md-5 pt-5 p-3 bg-primary ${styles.minVh} text-center align-items-center d-flex`} > */}
+      <div className={`p-md-5 pt-5 p-3 bg-primary text-center align-items-center d-flex`} >
+        <Container style={{ height: "calc(100vh - 137px)", overflow:'auto', scrollbarWidth:'none' }}>
           <Row>
             <Col>
               <Stack gap={3} className="py-5">

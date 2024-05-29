@@ -472,7 +472,7 @@ const CreateResume = ({ handleNavigation }) => {
       <div
         class="text-center"
         style={{
-          height: "calc(100vh - 100px)",
+          height: "calc(100vh - 42px)",
           justifyContent: "center",
           alignItems: "center",
           display: "flex",

@@ -195,7 +195,7 @@ function Dashboard({ handleNavigation }) {
                 <h3 className="mb-md-0 mb-3"><i className="bi bi-person"></i> Users</h3>
               </Col>
               <Col lg={4}>
-                <FloatingLabel controlId="search" label="Search">
+                <FloatingLabel controlId="search" label="Search by Name/Email/Content">
                   <Form.Control type="text" onChange={handleFilter} />
                 </FloatingLabel>
               </Col>

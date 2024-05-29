@@ -108,8 +108,8 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
                 <Col>
                   <h3>{resumeData.firstName} {resumeData.lastName}</h3></Col>
                 <Col className="text-end">
-                  <h5>{resumeData.phoneNumber}</h5>
-                  <h5>{resumeData.email}</h5>
+                  <h5>Mobile: {resumeData.phoneNumber}</h5>
+                  <h5>Email: {resumeData.email}</h5>
                 </Col>
               </Row>
 

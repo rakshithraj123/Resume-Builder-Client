@@ -62,7 +62,7 @@ function AppRoutes() {
       case PREVIEW_RESUME_MENU: 
       {
         if(isLoggedIn){
-          return navigate("/previewResume", { state: { resumeId: data }, replace: true })
+          return navigate("/previewResume", { state: data, replace: true })
         }else{
           return handleNavigation(LOG_IN_MENU)
         }

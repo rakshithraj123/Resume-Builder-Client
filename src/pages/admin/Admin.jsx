@@ -9,10 +9,11 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { adminService } from "../../services/admin.service";
 import { toast } from "react-toastify";
 import Button from 'react-bootstrap/Button';
-import { PREVIEW_RESUME_MENU } from "../../constants";
+import { CREATE_RESUME_MENU, PREVIEW_RESUME_MENU } from "../../constants";
 import debounce from 'lodash/debounce'; // Import debounce function from lodash
+import { resumeAddService } from "../../services/resumeAdd.service";
 
-const columns = (handleView) => [
+const columns = (handleView, handleEdit) => [
   {
     name: 'Name',
     selector: row => row.firstName + " " + row.lastName,
@@ -30,7 +31,24 @@ const columns = (handleView) => [
   },
   {
     name: 'Actions',
-    cell: row => (row.resumeId != null) ? <Button onClick={() => handleView(row)}>View</Button> : <></>,
+    conditionalCellStyles: [
+      {
+        when: row => true,
+        style: {
+          minWidth: '150px',
+        },
+      },
+    ],
+    cell: row => (row.resumeId != null) ?
+      <>
+        <Button style={{ width: '100px', marginRight: '10px' }} onClick={() => handleEdit(row)}>Edit</Button>
+        <Button style={{ width: '100px' }} onClick={() => handleView(row)}>View</Button>
+      </>
+      :
+      <>
+        <Button style={{ width: '100px', marginRight: '10px' }} onClick={() => handleEdit(row)}>Edit</Button>
+        <Button style={{ width: '100px' }} onClick={() => handleView(row)} disabled>View</Button>
+      </>,
     ignoreRowClick: true,
     allowOverflow: true,
     button: true,
@@ -50,6 +68,7 @@ function Dashboard({ handleNavigation }) {
   const [fetchedLastPage, setFetchedLastPage] = useState(0); 
   const [cachedRecords, setCachedRecords] = useState([]); 
   const NUMBER_OF_PAGES_TO_FETCH = 4
+  const [loadingResumeData, setLoadingResumeData] = useState(false);
 
   useEffect(() => {
 
@@ -153,7 +172,29 @@ function Dashboard({ handleNavigation }) {
 
   function handleView(row) {
     if (row.resumeId != null) {
-      handleNavigation(PREVIEW_RESUME_MENU, row.resumeId)
+      handleNavigation(PREVIEW_RESUME_MENU, {resumeId:row.resumeId, userId: row._id})
+    }
+  }
+
+  function handleEdit(row) {
+    if (row.resumeId != null) {
+      setLoadingResumeData(true)
+      resumeAddService.fetch(row.resumeId)
+        .then((response) => {
+          if (response.status) {
+            handleNavigation(CREATE_RESUME_MENU, { resumeData: response.data.Resume.content, resumeId: row.resumeId, userId: row._id })
+          } else {
+            toast("Fail to fetch resume");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          toast("Fail to fetch resume");
+        }).finally(() =>{
+          setLoadingResumeData(false)
+        })
+    } else {
+      handleNavigation(CREATE_RESUME_MENU, { resumeId: row.resumeId, userId: row._id })
     }
   }
 
@@ -175,6 +216,16 @@ function Dashboard({ handleNavigation }) {
     }
   };
 
+  
+  if (loadingResumeData)
+    return (
+      <div class="text-center" style={{ minHeight: "calc(100vh - 100px)", justifyContent: 'center', alignItems: "center", display: "flex" }}>
+        <div class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+    );
+
   return (
     <>
 
@@ -187,7 +238,7 @@ function Dashboard({ handleNavigation }) {
           </Row>
         </Container>
       </div>
-      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow">
+      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow"  style={{ minHeight: "calc(100vh - 260px)"}}>
         <Row>
           <Col>
             <Row className="justify-content-end align-items-center mb-2">
@@ -199,22 +250,22 @@ function Dashboard({ handleNavigation }) {
                   <Form.Control type="text" onChange={handleFilter} />
                 </FloatingLabel>
               </Col>
-            </Row>    
-              <DataTable
-                columns={columns(handleView)}
-                data={records}
-                pagination
-                paginationServer
-                paginationTotalRows={totalPages * rowsPerPage}
-                progressPending={loading}
-                paginationRowsPerPageOptions={[10, 20, 30]}
-                paginationPerPage={rowsPerPage}
-                paginationDefaultPage={currntPage}
-                onChangePage={handlePageChange}
-                onChangeRowsPerPage={handleRowsPerPageChange}
-                paginationIconFirstPage={null}
-                paginationIconLastPage={null}
-              />
+            </Row>
+            <DataTable
+              columns={columns(handleView, handleEdit)}
+              data={records}
+              pagination
+              paginationServer
+              paginationTotalRows={totalPages * rowsPerPage}
+              progressPending={loading}
+              paginationRowsPerPageOptions={[10, 20, 30]}
+              paginationPerPage={rowsPerPage}
+              paginationDefaultPage={currntPage}
+              onChangePage={handlePageChange}
+              onChangeRowsPerPage={handleRowsPerPageChange}
+              paginationIconFirstPage={null}
+              paginationIconLastPage={null}
+            />
           </Col>
         </Row>
       </Container>

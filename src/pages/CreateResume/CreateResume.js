@@ -95,6 +95,8 @@ const CreateResume = ({ handleNavigation }) => {
   console.log("create resume");
   console.log(resumeId);
 
+  const userId = state?.userId ? state?.userId : null;
+
   useEffect(() => {
     console.log("handleNavigation useEffect resumeId " + resumeId);
 
@@ -183,14 +185,14 @@ const CreateResume = ({ handleNavigation }) => {
     // Add logic to handle form submission, e.g., send data to backend
     let data = JSON.stringify(formData);
     resumeAddService
-      .create(formData)
+      .create(formData,userId)
       .then((response) => {
         // console.log(response)
         if (response.status) {
           // toast("Resume creation successful");
           //
           setResumeId(response.data.Resume._id);
-          handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id);
+          handleNavigation(PREVIEW_RESUME_MENU, { resumeId: response.data.Resume._id });
         } else if (response.status == false) {
           toast(response.message);
         }
@@ -208,7 +210,7 @@ const CreateResume = ({ handleNavigation }) => {
     // Add logic to handle form submission, e.g., send data to backend
     let data = JSON.stringify(formData);
     resumeAddService
-      .update(formData, resumeId)
+      .update(formData, resumeId,userId)
       .then((response) => {
         // console.log(response)
         if (response.status) {
@@ -216,7 +218,7 @@ const CreateResume = ({ handleNavigation }) => {
           //
           console.log("setResumeId " + response.data.Resume._id);
           setResumeId(response.data.Resume._id);
-          handleNavigation(PREVIEW_RESUME_MENU, response.data.Resume._id);
+          handleNavigation(PREVIEW_RESUME_MENU, {resumeId:response.data.Resume._id,userId:userId});
         } else if (response.status == false) {
           toast(response.message);
         }

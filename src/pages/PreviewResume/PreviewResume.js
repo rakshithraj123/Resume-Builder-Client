@@ -25,6 +25,8 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
   }
   const [resumeData, setResumeData] = useState({});
 
+  let userId = state?.userId? state?.userId : null;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -65,7 +67,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
 
   const goToResumeEdit = (e) => {
     e.preventDefault();
-    handleNavigation(CREATE_RESUME_MENU, { resumeData: resumeData, resumeId: resumeId })
+    handleNavigation(CREATE_RESUME_MENU, { resumeData: resumeData, resumeId: resumeId ,userId: userId})
   };
 
   if (loading)

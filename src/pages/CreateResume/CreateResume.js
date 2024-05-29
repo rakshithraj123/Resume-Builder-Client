@@ -495,7 +495,8 @@ const CreateResume = ({ handleNavigation }) => {
           </Row>
         </Container>
       </div>
-      <Container className="bg-white rounded-top mt-n5 shadow" style={{ height: '600px', overflow:'auto', scrollbarWidth:'none' }}>
+      <Container className="bg-white rounded-top mt-n5 shadow" style={{ height: '680px', overflow:'auto', scrollbarWidth:'none' }}>
+      {/* <Container className="bg-white rounded-top mt-n5 shadow">   */}
         <Row>
           <Col className="px-md-5 p-2 pt-md-2 pb-md-5">
             <Tabs activeKey={currentTab} id="" variant="underline">

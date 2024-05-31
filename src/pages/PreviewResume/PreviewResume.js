@@ -111,8 +111,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
         </Container>
       </div>
 
-      {/* <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow" style={{ height: '680px', overflow:'auto', scrollbarWidth:'none' }}> */}
-      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow" style={{ height: "calc(100vh - 227px)", overflow:'auto', scrollbarWidth:'none' }}>  
+      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow">
         <Row>
           <Col>
             <>

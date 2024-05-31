@@ -98,7 +98,7 @@ const ExperienceForm = forwardRef((props, ref)  => {
      
         </Form>
 
-        <div className="py-4">
+        <div className="py-2">
                     <Button variant="link"
                      disabled={!(props.professionalExperience.length < 10)}
                     onClick={(e) => props.addExperience()}>

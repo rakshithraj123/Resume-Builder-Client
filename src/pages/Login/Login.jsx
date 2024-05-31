@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/Col';
 import Logo from '../../img/logo.svg';
 import LoginBg from '../../img/loginbg.jpg';
 import Image from 'react-bootstrap/Image';
+import { encryptText, decryptText } from './cryptoUtils.js';
 
 // css
 import styles from "./Login.module.css";
@@ -28,15 +29,15 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-    const savedEmail = localStorage.getItem("rememberMeEmail");
-    const savedPassword = localStorage.getItem("rememberMePassword");
+    const encryptedEmail = localStorage.getItem("rememberMeEmail");
+    const encryptedPassword = localStorage.getItem("rememberMePassword");
 
-    if (savedEmail) {
-      setFormData((existingState) => ({ ...existingState, email: savedEmail }));
+    if (encryptedEmail && encryptedPassword) {
+      setFormData({
+        email: decryptText(encryptedEmail),
+        password: decryptText(encryptedPassword)
+      });
       setRememberMe(true);
-    }
-    if (savedPassword) {
-      setFormData((existingState) => ({ ...existingState, password: savedPassword }));
     }
   }, []);
 
@@ -68,8 +69,8 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
         handleNavigation(HOME_MENU);
 
         if (rememberMe) {
-          localStorage.setItem("rememberMeEmail", formData.email);
-          localStorage.setItem("rememberMePassword", formData.password);
+          localStorage.setItem("rememberMeEmail", encryptText(formData.email));
+          localStorage.setItem("rememberMePassword", encryptText(formData.password));
         } else {
           localStorage.removeItem("rememberMeEmail");
           localStorage.removeItem("rememberMePassword");

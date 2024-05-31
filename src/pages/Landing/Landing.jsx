@@ -23,9 +23,10 @@ function Landing({ user, handleNavigation }) {
 
   return (
     <>
-      <div className={`p-md-5 pt-5 p-3 bg-primary ${styles.minVh} text-center align-items-center d-flex`} >
-        <Container>
-          <Row>
+      {/* <div className={`p-md-5 pt-5 p-3 bg-primary ${styles.minVh} text-center align-items-center d-flex`} > */}
+      <div className={`p-md-5 pt-5 p-3 bg-primary text-center align-items-center d-flex`} >
+        <Container style={{ height: "calc(100vh - 137px)", overflow:'auto', scrollbarWidth:'none' }}>
+          <Row style={{marginTop: "calc(100vh - 60%)"}}>
             <Col>
               <Stack gap={3} className="py-5">
                 <h1 class="display-3 fw-bold text-white">Free <span className="text-gradiant">Resume Builder</span> - Generate your resume online.</h1>

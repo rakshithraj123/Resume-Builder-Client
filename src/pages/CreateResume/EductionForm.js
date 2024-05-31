@@ -41,8 +41,7 @@ const EductionForm = forwardRef((props, ref)  => {
                   <Col xs="auto">
 
                     {
-                      <Button variant="danger" size="lg"
-                      className={styles.removeButton}
+                      <Button variant="outline-danger" size="lg"
                         onClick={(e) => props.removeEducation(e, index)}
                         disabled={(props.education.length == 1)}>
                         <i class="bi bi-trash"></i>
@@ -63,7 +62,8 @@ const EductionForm = forwardRef((props, ref)  => {
             })
 
           }
-           <div className="py-4">
+
+           <div style={{ marginTop: '-15px' }}>
                     <Button variant="link"
                   onClick={(e) => props.addEducation()}
                   disabled={!(props.education.length < 10)} >

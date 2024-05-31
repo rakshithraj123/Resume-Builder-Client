@@ -14,12 +14,13 @@ function Footer({ user }) {
         <Container>
           <Row>
             <Col>
-              <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4">
+              {/* <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4"> */}
+              <div class="d-flex flex-wrap justify-content-between align-items-center">
                 <p class="mb-0 text-body-secondary">© 2024 Resume Builder</p>
 
-                <a href="/" class="mb-3 mb-md-0 link-body-emphasis">
+                {/* <a href="/" class="mb-3 mb-md-0 link-body-emphasis">
                   <Image src={Logo} width={40} />
-                </a>
+                </a> */}
 
                 <Nav >
                   {

@@ -78,7 +78,7 @@ const KeySkillsForm = forwardRef((props, ref) => {
       </Row> */}
         </Form>
 
-        <div className="py-4">
+        <div style={{ marginTop: '-15px' }}>
                     <Button variant="link"
                      disabled={!(props.keySkills.length < 10)}
                     onClick={(e) => props.addKeySkills()}>

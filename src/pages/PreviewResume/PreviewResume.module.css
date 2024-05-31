@@ -2,3 +2,19 @@
   list-style-type: disc;
   background-color: brown;
 }
+
+.largeFont {
+  font-size: 2rem;
+}
+
+.mediumFont {
+  font-size: 1.5rem;
+}
+
+.smallFont {
+  font-size: 1.3rem;
+}
+
+.defaultFont {
+  font-size: 1.2rem;
+}

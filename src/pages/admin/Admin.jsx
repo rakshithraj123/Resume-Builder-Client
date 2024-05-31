@@ -274,7 +274,7 @@ function Dashboard({ handleNavigation }) {
 
             </Row>    
               <DataTable
-                columns={columns(handleView)}
+                columns={columns(handleView,handleEdit)}
                 data={records}
                 pagination
                 paginationServer

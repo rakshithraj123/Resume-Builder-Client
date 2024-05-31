@@ -33,8 +33,8 @@ const NavBar = ({ user, handleLogout, activeMenu, handleMenuChange }) => {
     handleMenuChange(menuItem.menuName);
   }
   return (
-    <Navbar expand="lg" bg="primary" data-bs-theme="dark" fixed="top">
-      <Container>
+    <Navbar expand="lg" bg="primary" data-bs-theme="dark" fixed="top" style={{marginLeft:'1%', marginRight:'1%'}}>
+      {/* <Container> */}
         <Navbar.Brand href="/"><Image src={Logo} width={40} /> <span className='text-uppercase fw-bold'>Resume Builder</span></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -120,7 +120,7 @@ const NavBar = ({ user, handleLogout, activeMenu, handleMenuChange }) => {
             } */}
           </Nav>
         </Navbar.Collapse>
-      </Container>
+      {/* </Container> */}
     </Navbar>
 
 

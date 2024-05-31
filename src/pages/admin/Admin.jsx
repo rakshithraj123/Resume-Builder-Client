@@ -13,21 +13,42 @@ import { CREATE_RESUME_MENU, PREVIEW_RESUME_MENU } from "../../constants";
 import debounce from 'lodash/debounce'; // Import debounce function from lodash
 import { resumeAddService } from "../../services/resumeAdd.service";
 
+
+
+const tableHeaderStyle = {
+  headCells: {
+    style: {
+      fontSize: '1.1rem',
+      fontWeight: 'bold'
+    },
+  },
+}
+
 const columns = (handleView, handleEdit) => [
   {
     name: 'Name',
     selector: row => row.firstName + " " + row.lastName,
     sortable: true,
+    style: {
+      fontSize: '0.9rem',
+      fontWeight: 500,
+    },
   },
   {
     name: 'Email ID',
     selector: row => row.email,
     sortable: true,
+    style: {
+      fontSize: '0.9rem'
+    }
   },
   {
     name: 'Designation',
     selector: row => row.designation,
     sortable: true,
+    style: {
+      fontSize: '0.9rem'
+    }
   },
   {
     name: 'Actions',
@@ -250,22 +271,24 @@ function Dashboard({ handleNavigation }) {
                   <Form.Control type="text" onChange={handleFilter} />
                 </FloatingLabel>
               </Col>
-            </Row>
-            <DataTable
-              columns={columns(handleView, handleEdit)}
-              data={records}
-              pagination
-              paginationServer
-              paginationTotalRows={totalPages * rowsPerPage}
-              progressPending={loading}
-              paginationRowsPerPageOptions={[10, 20, 30]}
-              paginationPerPage={rowsPerPage}
-              paginationDefaultPage={currntPage}
-              onChangePage={handlePageChange}
-              onChangeRowsPerPage={handleRowsPerPageChange}
-              paginationIconFirstPage={null}
-              paginationIconLastPage={null}
-            />
+
+            </Row>    
+              <DataTable
+                columns={columns(handleView)}
+                data={records}
+                pagination
+                paginationServer
+                paginationTotalRows={totalPages * rowsPerPage}
+                progressPending={loading}
+                paginationRowsPerPageOptions={[10, 20, 30]}
+                paginationPerPage={rowsPerPage}
+                paginationDefaultPage={currntPage}
+                onChangePage={handlePageChange}
+                onChangeRowsPerPage={handleRowsPerPageChange}
+                paginationIconFirstPage={null}
+                paginationIconLastPage={null}
+                customStyles={tableHeaderStyle}
+              />
           </Col>
         </Row>
       </Container>

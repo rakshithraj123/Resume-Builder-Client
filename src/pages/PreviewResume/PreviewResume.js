@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -73,7 +74,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
       <div
         class="text-center"
         style={{
-          height: "calc(100vh - 100px)",
+          height: "calc(100vh - 41px)",
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
@@ -111,7 +112,8 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
         </Container>
       </div>
 
-      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow">
+      {/* <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow" style={{ height: '680px', overflow:'auto', scrollbarWidth:'none' }}> */}
+      <Container className="bg-white rounded-top p-md-5 p-3 mt-n5 shadow" style={{ height: "calc(100vh - 227px)", overflow:'auto', scrollbarWidth:'none' }}>  
         <Row>
           <Col>
             <>

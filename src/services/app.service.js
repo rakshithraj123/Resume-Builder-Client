@@ -1,4 +1,8 @@
+const TIME_OUT = 8000
+
 export const AppService = {
+
+  
   /**
    * Set http options
    * Default: POST, application/json
@@ -35,9 +39,9 @@ export const AppService = {
    * @param {object} requestOptions options object from options()
    */
 
-  makeRequest: async (url, requestOptions) => {
+  makeRequest: async (url, requestOptions,abortController) => {
   console.log(url)
-    const response = await fetch(url, requestOptions)
+    const response = await fetchWithTimeout(url, requestOptions,abortController)
     let result = null 
     if (!(response.error && response.error.name === 'AbortError')) {
       try {
@@ -70,3 +74,21 @@ export const HTTPHeaders = () => {
     }
   }
 }
+
+const fetchWithTimeout = (url, options,abortController) => {
+  if(abortController == null){
+    abortController = new AbortController()
+  }
+  const signal = abortController.signal;
+
+  const fetchPromise = fetch(url, { ...options, signal});
+
+  const timeoutPromise = new Promise((_, reject) => {
+    const timer = setTimeout(() => {
+      abortController.abort(Error("TIME_OUT"));
+      reject(new Error('Request timed out'));
+    }, TIME_OUT);
+  });
+
+  return Promise.race([fetchPromise, timeoutPromise]);
+};

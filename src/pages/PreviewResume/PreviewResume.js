@@ -13,10 +13,13 @@ import { useLocation } from "react-router-dom";
 import { resumeAddService } from "../../services/resumeAdd.service";
 import { toast } from "react-toastify";
 import { CREATE_RESUME_MENU } from "../../constants";
+import MyPopupDialog from '../../components/MyPopupDialog';
 
 const PreviewResume = ({ handleNavigation, savedResumeId }) => {
   const { state } = useLocation();
   const [loading, setLoading] = useState(false);
+  const [showReloadDialog, setShowReloadDialog] = useState(false);
+  let abortController 
 
   let resumeId = state?.resumeId;
   if (resumeId == null) {
@@ -27,31 +30,44 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
   let userId = state?.userId? state?.userId : null;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await resumeAddService.fetch(resumeId);
-
-        console.log(response);
-
-        if (response.status) {
-          setResumeData(response.data.Resume.content);
-        } else {
-          toast("Fail to fetch resume");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        // Handle error
-      } finally {
-        setLoading(false);
-      }
-    };
+    abortController = new AbortController();
     if (resumeId == null) {
       handleNavigation();
     } else {
-      fetchData();
+      fetchData();    
     }
+    return () => {
+      abortController.abort(Error("unmounting"));
+    };
   }, []);
+
+  const fetchData = async () => {
+    try {
+      setShowReloadDialog(false)
+      setLoading(true)
+      const response = await resumeAddService.fetch(resumeId, abortController);
+      setLoading(false)
+
+      if (response.status) {
+        setResumeData(response.data.Resume.content);
+      } else {
+        toast("Fail to fetch resume");
+      }
+    } catch (error) {
+      if (error.message === 'unmounting') {
+       //aborted due to component unmounted
+      } else    
+      if (error.message === "TIME_OUT") {
+        setShowReloadDialog(true)
+        setLoading(true);
+      } else {
+        console.error("Error:", error);   
+        setLoading(false)   
+      }   
+    } finally {
+  
+    }
+  };
 
   const printResume = (e) => {
     e.preventDefault();
@@ -79,6 +95,17 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
           display: "flex",
         }}
       >
+         {showReloadDialog && <MyPopupDialog
+        handleOkClick={(e) => {
+          setShowReloadDialog(false)
+          fetchData()
+        }}
+        handleCancelClick={() => {
+          setShowReloadDialog(false)
+        }}
+        title={"Resume Builder"}
+        message={"Something went wrong, Do you want to Reload Resume?"}
+      />}
         <div class="spinner-border" role="status">
           <span class="sr-only"></span>
         </div>
@@ -87,6 +114,17 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
 
   return (
     <>
+      {showReloadDialog && <MyPopupDialog
+        handleOkClick={(e) => {
+          setShowReloadDialog(false)
+          fetchData()
+        }}
+        handleCancelClick={() => {
+          setShowReloadDialog(false)
+        }}
+        title={"Resume Builder"}
+        message={"Something went wrong, Do you want to Reload Resume?"}
+      />}
       <div className="p-5 bg-primary">
         <Container>
           <Row className="align-items-center">

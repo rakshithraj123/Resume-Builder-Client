@@ -36,7 +36,7 @@ export const resumeAddService = {
       throw error;
     }
   },
-  fetch: async (id) => {
+  fetch: async (id,abortController) => {
     try {
       const options = AppService.optionsGET()
       let token = tokenService.getSessionToken();
@@ -50,7 +50,8 @@ export const resumeAddService = {
       response = await AppService.makeRequest(BASE_API_URL + FETCHRESUME + id, {
         ...options,
         headers: httpRequestHeaders
-      })
+      },
+      abortController)
 
       console.log("Response from create \n", response);
       console.log("Response from create id is \n", response.data.Resume._id);

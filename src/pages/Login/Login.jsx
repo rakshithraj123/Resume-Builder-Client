@@ -78,7 +78,11 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
       })
       .catch((err) => {
         console.log(err);
-        setMessage(err.message);
+        if (err.message === "TIME_OUT") {
+          setMessage("Try Again");
+        }else{
+          setMessage(err.message);
+        }      
         setLoading(false);
       });
   };

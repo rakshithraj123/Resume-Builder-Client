@@ -126,10 +126,10 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
                   </Col>
                   <Col className="text-end">
                     <h5 className={`${styles.defaultFont}`}>
-                      {resumeData.phoneNumber}
+                      Mobile: {resumeData.phoneNumber}
                     </h5>
                     <h5 className={`${styles.mediumFont}`}>
-                      {resumeData.email}
+                      Email: {resumeData.email}
                     </h5>
                   </Col>
                 </Row>

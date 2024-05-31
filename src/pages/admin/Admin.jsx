@@ -12,21 +12,40 @@ import Button from 'react-bootstrap/Button';
 import { PREVIEW_RESUME_MENU } from "../../constants";
 import debounce from 'lodash/debounce'; // Import debounce function from lodash
 
+const tableHeaderStyle = {
+  headCells: {
+    style: {
+      fontSize: '1.1rem',
+      fontWeight: 'bold'
+    },
+  },
+}
+
 const columns = (handleView) => [
   {
     name: 'Name',
     selector: row => row.firstName + " " + row.lastName,
     sortable: true,
+    style: {
+      fontSize: '0.9rem',
+      fontWeight: 500,
+    },
   },
   {
     name: 'Email ID',
     selector: row => row.email,
     sortable: true,
+    style: {
+      fontSize: '0.9rem'
+    }
   },
   {
     name: 'Designation',
     selector: row => row.designation,
     sortable: true,
+    style: {
+      fontSize: '0.9rem'
+    }
   },
   {
     name: 'Actions',
@@ -214,6 +233,7 @@ function Dashboard({ handleNavigation }) {
                 onChangeRowsPerPage={handleRowsPerPageChange}
                 paginationIconFirstPage={null}
                 paginationIconLastPage={null}
+                customStyles={tableHeaderStyle}
               />
           </Col>
         </Row>

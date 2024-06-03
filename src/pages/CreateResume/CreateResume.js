@@ -294,8 +294,9 @@ const CreateResume = ({ handleNavigation }) => {
 
   const vaildatedBasicFormData = () => {
     const userNameRegex = /^[a-zA-Z]+$/;
-    const phoneRegex = /^[0-9]{10}$/;
 
+    const phoneRegex = formData.phoneNumber.startsWith('+')? /^(\+?\d{2})?\d{10}$/ : /^[0-9]{10}$/
+   
     if (formData.firstName.length < 3) {
       console.log("First name cannot be less than 3 characters");
       toast("First name cannot be less than 3 characters");
@@ -312,9 +313,9 @@ const CreateResume = ({ handleNavigation }) => {
       console.log("Last name cannot contain special characters or numbers");
       toast("Last name cannot contain special characters or numbers");
       return false;
-    } else if (!phoneRegex.test(formData.phoneNumber)) {
+    } else if (!phoneRegex.test(formData.phoneNumber.replace(/\s/g, ''))) {
       console.log("Invalid phone number. It must be exactly 10 digits and contain only numbers");
-      toast("Invalid phone number. It must be exactly 10 digits and contain only numbers");
+      toast("Invalid phone number. It must be minimum 10 digits.");
       return false;
     } else {
       return true;

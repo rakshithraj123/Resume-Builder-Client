@@ -80,6 +80,7 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
     }
 
     setIsSubmitted(true);
+    setMessage('');
     userService
       .register(formData)
       .then((response) => {
@@ -91,7 +92,11 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
       })
       .catch((err) => {
         console.log(err);
-        setMessage(err.message);
+        if (err.message === "TIME_OUT") {
+          setMessage("Try Again");
+        }else{
+          setMessage(err.message);
+        }   
         setIsSubmitted(false);
       });
   };

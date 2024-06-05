@@ -151,7 +151,14 @@ const CreateResume = ({ handleNavigation }) => {
   const handleCompanyDateChangeChange = (e, index) => {
     const { name, value } = e.target;
     const professionalExperience = formData.professionalExperience;
+    console.log(professionalExperience);
     if (name == "present") {
+      const currentPresentIndex = professionalExperience.findIndex(
+        (exp) => exp.present === true
+      );
+      if (currentPresentIndex !== -1) {
+        professionalExperience[currentPresentIndex].present = false;
+      }
       professionalExperience[index][name] = e.target.checked
     }else
      if (name == "startDate") {

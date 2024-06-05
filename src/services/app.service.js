@@ -1,4 +1,4 @@
-const TIME_OUT = 8000
+const TIME_OUT = 10000
 
 export const AppService = {
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import 'react-datepicker/dist/react-datepicker.css';
 import { Col, FloatingLabel, Form, Row } from 'react-bootstrap';
 
 const DateRangePicker = (props) => {

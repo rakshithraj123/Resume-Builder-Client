@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 
-const MyPopupDialog = ({title,message,handleOkClick,handleCancelClick}) => {
- 
+const MyPopupDialog = ({
+  title,
+  message,
+  okButtonTitle,
+  cancelButtonTitle,
+  handleOkClick,
+  handleCancelClick,
+}) => {
   return (
-    <>   
-      <Modal  show={true} onHide={handleCancelClick}>
+    <>
+      <Modal show={true} onHide={handleCancelClick}>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {message}
-        </Modal.Body>
+        <Modal.Body>{message}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCancelClick}>
-            Cancel
+            {cancelButtonTitle ?? "Cancel"}
           </Button>
           <Button variant="primary" onClick={handleOkClick}>
-            OK
+            {okButtonTitle ?? "OK"}
           </Button>
         </Modal.Footer>
       </Modal>

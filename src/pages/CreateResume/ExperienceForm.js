@@ -3,6 +3,7 @@ import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap'
 import WorkForm from './WorkForm'
 import styles from "./CreateResume.module.css";
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import DateRangePicker from '../../components/DateRangePicker';
 
 const ExperienceForm = forwardRef((props, ref)  => {
     const handleSubmit = (event) => {
@@ -17,72 +18,86 @@ const ExperienceForm = forwardRef((props, ref)  => {
                 <p className="small text-muted mb-5">Start with your most recent job first.</p>
 
                 <Form ref={ref} onSubmit={handleSubmit}>
-   
-
-            {
-                props.professionalExperience.map((experience, index) => {
-                    return <div className="nestedContainer" key={index}>
-                        <Row>
-                            <Col >
-                                <Form.Group controlId={index} >
-                                <FloatingLabel controlId="" label="Company Name" className="mb-3">
-                                    <Form.Control
-                                        placeholder="Enter Company Name"
-                                        type="text"
-                                        name="company_name"
-                                        value={experience.company_name}
-                                        onChange={(e) => props.handleCompanyNameChange(e, index)}
-                                        required
-                                    />
-                                    </FloatingLabel>
-                                </Form.Group>
-                                <br />
-                                {
-                                    experience.work.map((work, workIndex) => {
-                                        return <WorkForm key={workIndex}
-                                            handleDesignationChange={props.handleDesignationChange}
-                                            handleWorkDetailChange={props.handleWorkDetailChange}
-                                            work={work}
-                                            workIndex={workIndex}
-                                            removeWork={props.removeWork}
-                                            addWork={props.addWork}
-                                            index={index}
-                                            removeWorkDisabled={(experience.work.length == 1)}
-                                            addWorkDisabled={!(workIndex == experience.work.length - 1 && experience.work.length < 10)}
-                                            removeWorkDetails={props.removeWorkDetails}
-                                            addWorkDetails={props.addWorkDetails}
-
-                                        />
-                                    })
-                                }
 
 
-                            </Col>
-                            <Col xs="auto">
-                                {
-                                    <Button variant="outline-danger" size="lg"
-                                        onClick={(e) => props.removeExperience(e, index)}
-                                        disabled={(props.professionalExperience.length == 1)}>
-                                     <i class="bi bi-trash"></i>
-                                    </Button>
+                    {
+                        props.professionalExperience.map((experience, index) => {
 
-                                }                           
-                            </Col>
+                            const handleDateChange = (event) => {
+                               props.handleCompanyDateChangeChange(event, index)
+                              };
+                            return <div className="nestedContainer" key={index}>
+                                <Row>
+                                    <Col >
 
-                        </Row>
+                                        <Row className="mb-md-3">
+                                           
+                                            <Form.Group as={Col} md={12} controlId={index}>
+                                                <FloatingLabel controlId="" label="Company Name" className="mb-3">
+                                                    <Form.Control
+                                                        placeholder="Enter Company Name"
+                                                        type="text"
+                                                        name="company_name"
+                                                        value={experience.company_name}
+                                                        onChange={(e) => props.handleCompanyNameChange(e, index)}
+                                                        required
+                                                    />
+                                                </FloatingLabel>
+                                            </Form.Group>
+                                            <DateRangePicker as={Col}  md={6}
+                                             handleDateChange={handleDateChange}
+                                             startDate={experience.startDate}
+                                             endDate={experience.endDate}
+                                             present={experience.present}
+                                             />
+                                        </Row>
+
+                                        {
+                                            experience.work.map((work, workIndex) => {
+                                                return <WorkForm key={workIndex}
+                                                    handleDesignationChange={props.handleDesignationChange}
+                                                    handleWorkDetailChange={props.handleWorkDetailChange}
+                                                    work={work}
+                                                    workIndex={workIndex}
+                                                    removeWork={props.removeWork}
+                                                    addWork={props.addWork}
+                                                    index={index}
+                                                    removeWorkDisabled={(experience.work.length == 1)}
+                                                    addWorkDisabled={!(workIndex == experience.work.length - 1 && experience.work.length < 10)}
+                                                    removeWorkDetails={props.removeWorkDetails}
+                                                    addWorkDetails={props.addWorkDetails}
+
+                                                />
+                                            })
+                                        }
 
 
-                       { (( props.professionalExperience.length > 1) &&   <hr className={styles.my_custom_divider} />)}
-                      
+                                    </Col>
+                                    <Col xs="auto">
+                                        {
+                                            <Button variant="outline-danger" size="lg"
+                                                onClick={(e) => props.removeExperience(e, index)}
+                                                disabled={(props.professionalExperience.length == 1)}>
+                                                <i class="bi bi-trash"></i>
+                                            </Button>
+
+                                        }
+                                    </Col>
+
+                                </Row>
 
 
-                    </div>
-                })
-
-            }
+                                {((props.professionalExperience.length > 1) && <hr className={styles.my_custom_divider} />)}
 
 
-            {/* <Row className="justify-content-between">
+
+                            </div>
+                        })
+
+                    }
+
+
+                    {/* <Row className="justify-content-between">
                 <Col xs="auto">
                     <Button variant="primary" onClick={props.prevStep} >
                         Previous
@@ -94,16 +109,16 @@ const ExperienceForm = forwardRef((props, ref)  => {
                     </Button>
                 </Col>
             </Row> */}
-            
-     
-        </Form>
 
-        <div className="py-2">
+
+                </Form>
+
+                <div className="py-2">
                     <Button variant="link"
-                     disabled={!(props.professionalExperience.length < 10)}
-                    onClick={(e) => props.addExperience()}>
-                      + Add more Compamy</Button>
-        </div>
+                        disabled={!(props.professionalExperience.length < 10)}
+                        onClick={(e) => props.addExperience()}>
+                        + Add more Compamy</Button>
+                </div>
             </div>
         </>
 

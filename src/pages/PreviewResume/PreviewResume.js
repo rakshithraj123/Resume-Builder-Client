@@ -81,8 +81,29 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
 
   const goToResumeEdit = (e) => {
     e.preventDefault();
-    handleNavigation(CREATE_RESUME_MENU, { resumeData: resumeData, resumeId: resumeId ,userId: userId})
+    handleNavigation(CREATE_RESUME_MENU, { resumeData: resumeData, resumeId: resumeId, userId: userId })
   };
+
+  const getFromToDate = (startDate, endDate, present) => {
+    if(startDate == null || startDate == ""){
+      return ""
+    }
+
+    let fromToDate = " (From "
+    let date = new Date(startDate);
+    fromToDate = fromToDate + date.toLocaleString('en-US', { month: 'long' })
+    fromToDate = fromToDate + " "+date.getFullYear() +" - "
+
+    if(present){
+      date = new Date(endDate);
+      fromToDate = fromToDate + "Present)"
+    }else{
+      date = new Date(endDate);
+      fromToDate = fromToDate + date.toLocaleString('en-US', { month: 'long' })
+      fromToDate = fromToDate + " "+date.getFullYear() +")"
+    }
+    return fromToDate 
+  }
 
   if (loading)
     return (
@@ -188,7 +209,9 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
                   (experience, experienceIndex) => (
                     <div key={experienceIndex}>
                       <h5 className={`mb-4 ${styles.mediumFont}`}>
-                        {experience.company_name}
+                        {experience.company_name}{getFromToDate(experience.startDate,
+                          experience.endDate,
+                          experience.present)}
                       </h5>
 
                       {experience.work.map((item, workIndex) => (

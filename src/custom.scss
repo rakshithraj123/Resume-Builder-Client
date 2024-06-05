@@ -206,3 +206,28 @@ body {
     }
   }
 }
+
+.custom-checkbox .form-check-input[type="checkbox"] {
+  -webkit-appearance: none; /* Remove default appearance */
+  -moz-appearance: none;
+  appearance: none;
+  width: 20px; /* Adjust size */
+  height: 20px;
+  border: 2px solid black; /* Adjust border */
+  border-radius: 3px; /* Adjust border radius */
+  background-color: white; /* Change background color */
+  outline: none; /* Remove focus outline */
+  cursor: pointer; /* Add pointer cursor */
+}
+
+.custom-checkbox .form-check-input[type="checkbox"]:checked {
+  background-color: blue; /* Change background color when checked */
+}
+
+.custom-checkbox .form-check-input[type="checkbox"]::before {
+  content: ''; /* Remove default content */
+  display: block;
+  width: 10px; /* Adjust size of the custom image */
+  height: 10px;
+  background-size: cover;
+}

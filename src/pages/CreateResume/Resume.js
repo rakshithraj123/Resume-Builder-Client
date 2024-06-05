@@ -9,6 +9,9 @@ class Resume {
       this.experience = experience || [];
       this.professionalExperience = professionalExperience || [{
         company_name: "",
+        startDate:"",
+        endDate:"",
+        present:false,
         work: [{
           designation: "",
           work_details: [""]

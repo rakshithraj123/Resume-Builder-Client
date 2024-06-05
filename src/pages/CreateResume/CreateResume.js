@@ -148,6 +148,44 @@ const CreateResume = ({ handleNavigation }) => {
     });
   };
 
+  const handleCompanyDateChangeChange = (e, index) => {
+    const { name, value } = e.target;
+    const professionalExperience = formData.professionalExperience;
+    if (name == "present") {
+      professionalExperience[index][name] = e.target.checked
+    }else
+     if (name == "startDate") {
+      professionalExperience[index][name] = value
+      console.log(name + "=" + value)
+    }
+    else {
+      let startDateText = professionalExperience[index].startDate
+      if (startDateText == null
+        || startDateText == "") {
+        professionalExperience[index][name] = ""
+        toast("Enter Start Date first")
+      } else {
+  
+        const startTime = (new Date(startDateText)).getTime();
+        const endTime = (new Date(value)).getTime();
+        if (startTime > endTime) {
+          professionalExperience[index][name] = ""
+          toast("End date must be greater then Start Date")
+        } else {
+          professionalExperience[index][name] = value
+        }
+      }
+    }
+
+    setFormData({
+      ...formData,
+      professionalExperience: professionalExperience,
+    });
+    console.log(professionalExperience)
+
+  };
+
+
   const handleDesignationChange = (e, index, workIndex) => {
     const { name, value } = e.target;
     const professionalExperience = formData.professionalExperience;
@@ -536,6 +574,7 @@ const CreateResume = ({ handleNavigation }) => {
                   removeWorkDetails={removeWorkDetails}
                   addWorkDetails={addWorkDetails}
                   handleCompanyNameChange={handleCompanyNameChange}
+                  handleCompanyDateChangeChange={handleCompanyDateChangeChange}
                   ref={experienceFormRef}
                 />
               </Tab>

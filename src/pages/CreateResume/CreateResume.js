@@ -87,9 +87,28 @@ const CreateResume = ({ handleNavigation }) => {
 
     // Add more fields as needed
   };
+  
+  const getValidResume = (data) => {
+    let tempResume = new Resume()
+
+    if(data.additionalQualifications == null){
+      data.additionalQualifications = tempResume.additionalQualifications 
+   }
+    if(data.education == null){
+      data.education = tempResume.education 
+   }
+    if(data.keySkills == null){
+       data.keySkills = tempResume.keySkills 
+    }
+    if(data.professionalExperience == null){
+      data.professionalExperience = (tempResume).professionalExperience 
+   }
+    return data
+  }
+
   const resume = new Resume();
   const [formData, setFormData] = useState(
-    state?.resumeData ? state?.resumeData : resume
+    state?.resumeData ? getValidResume(state?.resumeData) : resume
   );
   const resumeId = state?.resumeId ? state?.resumeId : null;
   console.log("create resume");

@@ -572,7 +572,7 @@ const CreateResume = ({ handleNavigation }) => {
           </Row>
         </Container>
       </div>
-      <Container className="bg-white rounded-top mt-n5 shadow" style={{ height: "calc(100vh - 185px)", overflow:'auto', scrollbarWidth:'none' }}>
+      <Container className="bg-white rounded-top mt-n5 shadow" style={{ minHeight: "calc(83vh )", overflow:'auto', scrollbarWidth:'none' }}>
       {/* <Container className="bg-white rounded-top mt-n5 shadow">   */}
         <Row>
           <Col className="px-md-5 p-2 pt-md-2 pb-md-5">

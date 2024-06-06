@@ -303,7 +303,7 @@ function Dashboard({ handleNavigation }) {
       <div
         class="text-center"
         style={{
-          minHeight: "calc(100vh - 100px)",
+          height: "calc(97vh - 8px )",
           justifyContent: "center",
           alignItems: "center",
           display: "flex",

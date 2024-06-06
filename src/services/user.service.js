@@ -79,7 +79,7 @@ export const userService = {
 
 
 const hashString = (plainText) => {
-  const secretKey = "ReactNodejs"
+  const secretKey = process.env.REACT_APP_AUTH_PASSWORD_HASH_KEY;
   const cipherText = aes.encrypt(plainText, secretKey).toString()
   console.log(cipherText);
   return cipherText

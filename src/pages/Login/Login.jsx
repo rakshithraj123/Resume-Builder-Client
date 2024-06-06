@@ -74,6 +74,7 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
         } else {
           localStorage.removeItem("rememberMeEmail");
           localStorage.removeItem("rememberMePassword");
+          setRememberMe(false);
         }
       })
       .catch((err) => {

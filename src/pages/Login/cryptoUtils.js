@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 
-const secretKey = "ProtectedUserLogin$123";
+const secretKey = process.env.REACT_APP_REMEMBER_ME_HASH_KEY;
 
 export const encryptText = (data) => {
   try {

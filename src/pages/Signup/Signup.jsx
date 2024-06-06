@@ -93,9 +93,9 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
       .catch((err) => {
         console.log(err);
         if (err.message === "TIME_OUT") {
-          setMessage("Try Again");
+          toast("Signup timed out. Please try again.");
         }else{
-          setMessage(err.message);
+          toast(err.message);
         }   
         setIsSubmitted(false);
       });

@@ -13,6 +13,7 @@ import Logo from '../../img/logo.svg';
 import LoginBg from '../../img/loginbg.jpg';
 import Image from 'react-bootstrap/Image';
 import { encryptText, decryptText } from './cryptoUtils.js';
+import { toast } from "react-toastify";
 
 // css
 import styles from "./Login.module.css";
@@ -67,7 +68,6 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
         setLoading(false);
         handleAuthEvt();
         handleNavigation(HOME_MENU);
-
         if (rememberMe) {
           localStorage.setItem("rememberMeEmail", encryptText(formData.email));
           localStorage.setItem("rememberMePassword", encryptText(formData.password));
@@ -79,9 +79,9 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
       .catch((err) => {
         console.log(err);
         if (err.message === "TIME_OUT") {
-          setMessage("Try Again");
+          toast("Login timed out. Please try again.");
         }else{
-          setMessage(err.message);
+          toast(err.message);
         }      
         setLoading(false);
       });

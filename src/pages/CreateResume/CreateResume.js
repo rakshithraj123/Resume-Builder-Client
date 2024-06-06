@@ -263,6 +263,11 @@ const CreateResume = ({ handleNavigation }) => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.message === "TIME_OUT") {
+          toast("Request timeout. Please try again.");
+        }else{
+          toast("Failed to submit. Please try again.");
+        } 
       })
       .finally(() => {
         setLoading(false);
@@ -289,6 +294,11 @@ const CreateResume = ({ handleNavigation }) => {
       })
       .catch((err) => {
         console.log(err);
+        if (err.message === "TIME_OUT") {
+          toast("Request timeout. Please try again.");
+        }else{
+          toast("Failed to submit. Please try again.");
+        } 
       })
       .finally(() => {
         setLoading(false);

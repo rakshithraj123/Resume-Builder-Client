@@ -15,6 +15,7 @@ import SignupBg from "../../img/signup.jpg";
 import Image from "react-bootstrap/Image";
 
 import styles from "./Signup.module.css";
+import { validateSignUpFormData } from "../../Utils/ResumeBuilderUtilities.jsx";
 
 const Signup = ({ handleAuthEvt, handleNavigation }) => {
   const imgInputRef = useRef(null);
@@ -73,9 +74,9 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    const validationMessage = validateFormData();
-    if (validationMessage !== true) {
-      setMessage(validationMessage);
+    const {isValid,validationMessage} = validateSignUpFormData(formData);
+    if (!isValid) {
+      toast(validationMessage);
       return;
     }
 
@@ -101,39 +102,25 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
       });
   };
 
-  const validateFormData = () => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phonePattern = /^[6-9]\d{9}$/;
-
-    if (!formData.firstName || !formData.lastName) {
-      return "First name and last name are required";
-    }
-
-    if (!emailPattern.test(formData.email)) {
-      return "Invalid email address";
-    }
-
-    if (formData.password.length < 8) {
-      return "Password must be at least 8 characters long";
-    }
-
-    if (formData.password !== formData.passwordConf) {
-      return "Passwords do not match";
-    }
-
-    if (!phonePattern.test(formData.phoneNumber)) {
-      return "Invalid phone number";
-    }
-
+  const handleKeyPress = (event) => {
+    const { key } = event;
+    console.log(key)
+    // Allow control keys such as Backspace, Delete, Arrow keys, etc.
     if (
-      formData.designation === "" ||
-      formData.designation === "Select Designation"
+      !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown','Plus'].includes(key) &&
+      (key < '0' || key > '9') && key !== '+'
     ) {
-      return "Select designation from drop down";
+      event.preventDefault();
     }
-
-    return true;
   };
+
+  const handlePaste = (event) => {
+    const paste = (event.clipboardData || window.clipboardData).getData('text');
+    if (!/^\d+$/.test(paste)) {
+      event.preventDefault();
+    }
+  };
+  
 
   const {
     firstName,
@@ -261,6 +248,8 @@ const Signup = ({ handleAuthEvt, handleNavigation }) => {
                         name="phoneNumber"
                         value={phoneNumber}
                         onChange={handleChange}
+                        onKeyDown={handleKeyPress}
+                        onPaste={handlePaste}
                         maxLength={10}
                       />
                     </FloatingLabel>

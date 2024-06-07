@@ -14,6 +14,7 @@ import LoginBg from '../../img/loginbg.jpg';
 import Image from 'react-bootstrap/Image';
 import { encryptText, decryptText } from './cryptoUtils.js';
 import { toast } from "react-toastify";
+import { validateLoginFormData,isLoginFormInvalid } from "../../Utils/ResumeBuilderUtilities.jsx";
 
 // css
 import styles from "./Login.module.css";
@@ -54,9 +55,9 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    const validationMessage = validateFormData();
-    if (validationMessage !== true) {
-      setMessage(validationMessage);
+    const {isValid,validationMessage} = validateLoginFormData(formData);
+    if (!isValid) {
+      toast(validationMessage);
       return;
     }
 
@@ -90,18 +91,6 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
 
   const { email, password } = formData;
 
-  const validateFormData = () => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(formData.email)) {
-      return "Invalid email address";
-    }
-    return true;
-  };
-
-  const isFormInvalid = () => {
-    return !(email && password);
-  };
 
   if (loading) {
     return (
@@ -156,7 +145,7 @@ const LoginPage = ({ handleAuthEvt, handleNavigation }) => {
                       />
                     </Form.Group>
                     <div className="d-grid mb-3">
-                      <Button variant="primary" type="submit" className="p-3" disabled={isFormInvalid()}>
+                      <Button variant="primary" type="submit" className="p-3" disabled={isLoginFormInvalid(email,password)}>
                         Sign in
                       </Button>
                     </div>

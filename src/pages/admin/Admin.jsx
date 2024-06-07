@@ -12,7 +12,7 @@ import Button from "react-bootstrap/Button";
 import { CREATE_RESUME_MENU, PREVIEW_RESUME_MENU } from "../../constants";
 import debounce from "lodash/debounce"; // Import debounce function from lodash
 import { resumeAddService } from "../../services/resumeAdd.service";
-import MyPopupDialog from "../../components/MyPopupDialog";
+import CustomPopupDialog from "../../components/CustomPopupDialog";
 
 const tableHeaderStyle = {
   headCells: {
@@ -370,7 +370,7 @@ function Dashboard({ handleNavigation }) {
           </Col>
         </Row>
         {showRetryPopup && (
-          <MyPopupDialog
+          <CustomPopupDialog
             handleOkClick={() => {
               fetchData(
                 currntPage,

@@ -13,7 +13,7 @@ import { useLocation } from "react-router-dom";
 import { resumeAddService } from "../../services/resumeAdd.service";
 import { toast } from "react-toastify";
 import { CREATE_RESUME_MENU } from "../../constants";
-import MyPopupDialog from '../../components/MyPopupDialog';
+import CustomPopupDialog from '../../components/CustomPopupDialog';
 
 const PreviewResume = ({ handleNavigation, savedResumeId }) => {
   const { state } = useLocation();
@@ -116,7 +116,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
           display: "flex",
         }}
       >
-         {showReloadDialog && <MyPopupDialog
+         {showReloadDialog && <CustomPopupDialog
         handleOkClick={(e) => {
           setShowReloadDialog(false)
           fetchData()
@@ -135,7 +135,7 @@ const PreviewResume = ({ handleNavigation, savedResumeId }) => {
 
   return (
     <>
-      {showReloadDialog && <MyPopupDialog
+      {showReloadDialog && <CustomPopupDialog
         handleOkClick={(e) => {
           setShowReloadDialog(false)
           fetchData()

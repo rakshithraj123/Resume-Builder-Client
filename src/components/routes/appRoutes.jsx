@@ -20,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import App from '../../pages/admin/Admin'
 import { getResumeIdState,getIsAdminState,getLoggInStateState} from '../../redux/'
 import { useSelector } from 'react-redux';
-import MyPopupDialog from '../MyPopupDialog';
+import CustomPopupDialog from '../CustomPopupDialog';
 import Footer from '../Footer/Footer'
 
 function AppRoutes() {
@@ -180,7 +180,7 @@ function AppRoutes() {
         </Routes>
       </div>
       {showNav && <Footer user={userService.getUser()}/>}
-      {showLogoutDialog && <MyPopupDialog 
+      {showLogoutDialog && <CustomPopupDialog 
       handleOkClick={()=>{
           setShowLogoutDialog(false)
           logout()

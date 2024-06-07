@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const MyPopupDialog = ({
+const CustomPopupDialog = ({
   title,
   message,
   okButtonTitle,
@@ -29,4 +29,4 @@ const MyPopupDialog = ({
   );
 };
 
-export default MyPopupDialog;
+export default CustomPopupDialog;
